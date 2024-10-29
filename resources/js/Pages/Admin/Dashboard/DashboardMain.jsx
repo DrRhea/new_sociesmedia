@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import AdminLayout from '@/Layout/AdminLayout';
 
 const DashboardMain = () => {
   return (
-    <div>DashboardMain</div>
-  )
+    <AdminLayout>
+      test
+    </AdminLayout>
+  );
 }
 
-export default DashboardMain
+export default DashboardMain;
