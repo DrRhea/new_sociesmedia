@@ -91,4 +91,3 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
         Route::get('/users', 'index');
     });
 });
-
