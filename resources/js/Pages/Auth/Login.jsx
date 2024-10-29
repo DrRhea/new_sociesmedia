@@ -7,16 +7,20 @@ export default function HeroFormImageAndForm() {
   return (
     <>
       {/* Hero */}
-      <div className="relative overflow-hidden">
-        <div className="container py-24 lg:py-32">
-          <div className="md:pe-8 md:w-1/2 xl:pe-0 xl:w-5/12">
+      <div className="flex min-h-screen">
+        <img
+          className="hidden md:block md:w-1/2 h-full object-cover"
+          src="https://placehold.co/700x800"
+          alt="image description"
+        />
+        <div className="flex flex-1 items-center justify-center p-8">
+          <div className="w-full max-w-md">
             {/* Title */}
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              Solving problems for every team
+              Masuk
             </h1>
             <p className="mt-3 text-xl text-muted-foreground">
-              Teams use Shadcn UI to build beautiful cross-platform hybrid apps
-              in a fraction of the time.
+              Masukkan emailmu di bawah untuk masuk ke akun kamu
             </p>
             {/* End Title */}
             <div className="mt-8 grid">
@@ -28,6 +32,7 @@ export default function HeroFormImageAndForm() {
                   viewBox="0 0 46 47"
                   fill="none"
                 >
+                  {/* SVG path elements */}
                   <path
                     d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z"
                     fill="#4285F4"
@@ -45,27 +50,21 @@ export default function HeroFormImageAndForm() {
                     fill="#EB4335"
                   />
                 </svg>
-                Sign up with Google
+                Masuk dengan Google
               </Button>
             </div>
             <Separator asChild className="my-6 bg-background">
-              <div className="py-3 flex items-center text-xs text-muted-foreground uppercase before:flex-[1_1_0%] before:border-t before:border-gray-200 before:me-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ms-6 dark:before:border-gray-700 dark:after:border-gray-700">
-                Or
+              <div className="py-3 flex items-center text-xs text-muted-foreground uppercase before:flex-[1_1_0%] before:border-t before:border-gray-200 before:mr-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ml-6 dark:before:border-gray-700 dark:after:border-gray-700">
+                Atau
               </div>
             </Separator>
             {/* Form */}
             <form>
               <div className="mb-4">
-                <Label htmlFor="firstName" className="sr-only">
-                  Full name
-                </Label>
-                <Input type="text" id="firstName" placeholder="Full name" />
-              </div>
-              <div className="mb-4">
                 <Label htmlFor="email" className="sr-only">
                   Email
                 </Label>
-                <Input type="email" id="email" placeholder="Email" />
+                <Input type="email" id="email" placeholder="Email atau username" />
               </div>
               <div className="mb-4">
                 <Label htmlFor="password" className="sr-only">
@@ -74,18 +73,16 @@ export default function HeroFormImageAndForm() {
                 <Input type="password" id="password" placeholder="Password" />
               </div>
               <div className="grid">
-                <Button>Sign up</Button>
+                <Button>Masuk</Button>
               </div>
             </form>
             {/* End Form */}
+            {/* Signup Link */}
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              Belum punya akun? <a href="/register" className="text-blue-600 hover:underline">Daftar di sini</a>
+            </p>
           </div>
         </div>
-        <img
-          className="hidden md:block md:absolute md:top-0 md:start-1/2 md:end-0 h-full"
-          src="https://placehold.co/700x800"
-          alt="image description"
-        />
-        {/* End Col */}
       </div>
       {/* End Hero */}
     </>
