@@ -12,7 +12,7 @@ class ForumController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('User/Forum/ForumMain');
     }
 
     /**

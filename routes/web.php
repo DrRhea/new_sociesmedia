@@ -71,7 +71,7 @@ Route::prefix('kontak')->group(function () {
 });
 
 // Administrator
-Route::prefix('dashboard')->group(function () {
+Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::controller(AdminDashboard::class)->group(function () {
         Route::get('/', 'index');
     });

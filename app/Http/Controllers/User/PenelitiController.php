@@ -12,7 +12,7 @@ class PenelitiController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('User/Peneliti/PenelitiMain');
     }
 
     /**
