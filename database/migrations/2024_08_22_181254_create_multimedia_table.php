@@ -11,15 +11,17 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('media', function (Blueprint $table) {
+    Schema::create('multimedia', function (Blueprint $table) {
       $table->id();
-      $table->enum('type', ['video', 'podcast', 'poster', 'games']);
-      $table->string('title', 255);
-      $table->string('url', 255)->nullable();
-      $table->string('thumbnail', 255);
+      $table->string('title', 255)->unique();
       $table->text('description')->nullable();
+      $table->string('content');
+      $table->enum('type', ['video', 'podcast', 'poster', 'games']);
+      $table->string('thumbnail', 255);
+      $table->string('slug');
       $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
       $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+      $table->foreignId('updated_by')->constrained('users')->onDelete('cascade')->nullable();
       $table->timestamps();
     });
   }

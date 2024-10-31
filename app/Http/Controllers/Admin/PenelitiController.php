@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Peneliti;
 use Illuminate\Http\Request;
 
 class PenelitiController extends Controller
@@ -10,9 +11,9 @@ class PenelitiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index_konten()
     {
-        //
+        return inertia("Admin/Peneliti/Konten/PenelitiMain");
     }
 
     /**
@@ -61,5 +62,9 @@ class PenelitiController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function index_daftar()
+    {
+        return inertia("Admin/Peneliti/Daftar/PenelitiMain");
     }
 }

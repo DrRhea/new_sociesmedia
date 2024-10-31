@@ -10,9 +10,9 @@ class MateriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index_konten()
     {
-        //
+        return inertia("Admin/Materi/Konten/MateriMain");
     }
 
     /**
@@ -61,5 +61,9 @@ class MateriController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function index_daftar()
+    {
+        return inertia("Admin/Materi/Daftar/MateriMain");
     }
 }

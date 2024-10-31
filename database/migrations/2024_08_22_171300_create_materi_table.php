@@ -13,11 +13,14 @@ return new class extends Migration
   {
     Schema::create('materi', function (Blueprint $table) {
       $table->id();
-      $table->enum('kelas', ['VII', 'VIII', 'IX']);
       $table->string('title', 255);
-      $table->text('file');
-      $table->boolean('is_active')->default(true);
+      $table->text('description')->nullable();
+      $table->text('content');
+      $table->enum('kelas', ['VII', 'VIII', 'IX']);
+      $table->string('slug');
+      $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
       $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+      $table->foreignId('updated_by')->constrained('users')->onDelete('cascade')->nullable();
       $table->timestamps();
     });
   }

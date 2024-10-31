@@ -182,11 +182,11 @@ const MultimediaPilihan = () => {
             {/* Tabs for Multimedia Selection */}
             <div className="flex items-center justify-between mb-6">
               <Tabs aria-label="Multimedia Types" className="w-full">
-                <Tab key="all" title="Semua" onClick={() => setActiveTab('all')} />
-                <Tab key="video" title="Video" onClick={() => setActiveTab('video')} />
-                <Tab key="podcast" title="Podcast" onClick={() => setActiveTab('podcast')} />
-                <Tab key="poster" title="Poster" onClick={() => setActiveTab('poster')} />
-                <Tab key="games" title="Games" onClick={() => setActiveTab('games')} />
+                <Tab key="all" title="Semua" onClick={() => setActiveTab('all')}>Semua</Tab>
+                <Tab key="video" title="Video" onClick={() => setActiveTab('video')}>Video</Tab>
+                <Tab key="podcast" title="Podcast" onClick={() => setActiveTab('podcast')}>Podcast</Tab>
+                <Tab key="poster" title="Poster" onClick={() => setActiveTab('poster')}>Poster</Tab>
+                <Tab key="games" title="Games" onClick={() => setActiveTab('games')}>Games</Tab>
               </Tabs>
             </div>
 

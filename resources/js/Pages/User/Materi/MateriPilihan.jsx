@@ -195,13 +195,13 @@ const BerandaMateri = () => {
             <div className="flex items-center justify-between mb-6">
               <Tabs aria-label="Kelas" className="w-full">
                 <Tab key="kelas-vii" title="Kelas VII">
-                  <p className="text-lg">Materi untuk Kelas VII</p>
+                  <p className="text-lg">Kelas VII</p>
                 </Tab>
                 <Tab key="kelas-viii" title="Kelas VIII">
-                  <p className="text-lg">Materi untuk Kelas VIII</p>
+                  <p className="text-lg">Kelas VIII</p>
                 </Tab>
                 <Tab key="kelas-ix" title="Kelas IX">
-                  <p className="text-lg">Materi untuk Kelas IX</p>
+                  <p className="text-lg">Kelas IX</p>
                 </Tab>
               </Tabs>
             </div>

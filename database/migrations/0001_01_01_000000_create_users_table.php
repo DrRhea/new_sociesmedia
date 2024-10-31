@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('email', 255)->unique();
             $table->string('password', 255)->nullable();
-            $table->enum('role', ['murid', 'guru', 'admin', 'superadmin'])->default('murid');
-            $table->string('phone', 20)->nullable();
+            $table->enum('role', ['murid', 'guru', 'admin', 'superadmin'])->nullable();
             $table->string('profile_picture', 255)->nullable();
             $table->string('google_id', 255)->unique()->nullable();
             $table->string('google_token', 255)->nullable();

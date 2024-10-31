@@ -10,9 +10,9 @@ class ArtikelController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index_konten()
     {
-        //
+        return inertia("Admin/Artikel/Konten/ArtikelMain");
     }
 
     /**
@@ -61,5 +61,9 @@ class ArtikelController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function index_daftar()
+    {
+        return inertia("Admin/Artikel/Daftar/ArtikelMain");
     }
 }

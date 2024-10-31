@@ -17,9 +17,10 @@ return new class extends Migration
             $table->date('birth_date');
             $table->enum('gender', ['male', 'female']);
             $table->string('nis')->nullable();
+            $table->string('phone', 20)->nullable();
             $table->longText('address');
             $table->text('school');
-            $table->enum('grade', ['7', '8', '9']); // SMP has grades 7, 8, and 9
+            $table->enum('grade', ['7', '8', '9']);
             $table->timestamps();
         });
     }

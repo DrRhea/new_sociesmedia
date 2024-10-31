@@ -7,7 +7,7 @@ const BerandaArtikel = () => {
             {/* Header section with title and link */}
             <div className="flex items-center justify-between px-8 mb-8">
                 <h1 className="text-3xl font-semibold text-left">Artikel Terkini</h1>
-                <a href="#" className="font-semibold text-purple-600 text-md">Lihat Semua</a>
+                <a href="/artikel" className="font-semibold text-purple-600 text-md">Lihat Semua</a>
             </div>
 
             {/* Cards section */}

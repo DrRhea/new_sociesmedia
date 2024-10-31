@@ -16,6 +16,14 @@ const MultimediaMain = () => {
             <UserLayout>
                 <MultimediaHero />
                 <MultimediaPilihan/>
+                <a 
+                    href="#"
+                    className="fixed bottom-5 right-5 bg-black text-white p-3 rounded-lg shadow-lg text-center"
+                    style={{ width: '80px', height: '80px' }}
+                >
+                    <div className="text-xs">Kelola</div>
+                    <div className="font-semibold">Media</div>
+                </a>
             </UserLayout>
         </>
     );
