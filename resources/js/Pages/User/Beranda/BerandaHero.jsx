@@ -4,13 +4,13 @@ import {Card, CardFooter, CardHeader, Image, Input} from "@nextui-org/react";
 const BerandaHero = () => {
     return (
         <div>
-            <Card radius={"none"} className="w-full h-[400px] col-span-12 sm:col-span-7">
+            <Card radius={"none"} className="w-full h-full aspect-video sm:aspect-[10/5] md:aspect-[8/3] col-span-12 sm:col-span-7">
                 <Image
                     removeWrapper
                     radius={"none"}
-                    alt="Relaxing app background"
-                    className="z-0 w-full h-full object-cover brightness-75"
-                    src="https://placehold.co/600x400?text=Beranda"
+                    alt="Banner"
+                    className="z-0 w-full h-full object-cover"
+                    src="/img/banner/beranda.webp"
                 />
                 <CardFooter className="absolute bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100 backdrop-blur-md">
                     <div className="flex flex-grow gap-2 items-center max-w-screen-lg mx-auto">
@@ -39,7 +39,7 @@ const BerandaHero = () => {
                                     "!cursor-text",
                                 ],
                             }}
-                            placeholder="Type to search..."
+                            placeholder="Ketik untuk mencari..."
                             startContent={
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"

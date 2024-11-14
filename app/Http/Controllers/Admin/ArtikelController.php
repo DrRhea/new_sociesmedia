@@ -62,6 +62,10 @@ class ArtikelController extends Controller
     {
         //
     }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function index_daftar()
     {
         return inertia("Admin/Artikel/Daftar/ArtikelMain");

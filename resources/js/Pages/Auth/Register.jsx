@@ -1,17 +1,30 @@
-import React from 'react'
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import React from 'react';
+import { useForm } from '@inertiajs/react';
+import { Button, Input } from "@nextui-org/react";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
 const Register = () => {
+  const { data, setData, post, processing, errors } = useForm({
+    username: '',
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+  });
+
+  function submit(e) {
+    e.preventDefault();
+    post('/register');
+  }
+
   return (
     <>
       {/* Hero */}
       <div className="flex min-h-screen">
         <img
           className="hidden md:block md:w-1/2 h-full object-cover"
-          src="https://placehold.co/700x800"
+          src="/img/auth/register.webp"
           alt="image description"
         />
         <div className="flex flex-1 items-center justify-center p-8">
@@ -25,7 +38,7 @@ const Register = () => {
             </p>
             {/* End Title */}
             <div className="mt-8 grid">
-              <Button variant={"outline"}>
+              <Button className='bg-white border-2 border-blue-100 hover:bg-gray-50' onClick={() => window.location.href = '/auth/google'}>
                 <svg
                   className="w-4 h-auto mr-2"
                   width={46}
@@ -60,39 +73,69 @@ const Register = () => {
               </div>
             </Separator>
             {/* Form */}
-            <form>
+            <form onSubmit={submit}>
               <div className="mb-4">
-                <Label htmlFor="username" className="sr-only">
-                  Username
-                </Label>
-                <Input type="text" id="username" placeholder="Username" />
+                <Label htmlFor="username" className="sr-only">Username</Label>
+                <Input
+                  isRequired
+                  label="Nama Pengguna"
+                  type="text"
+                  value={data.username}
+                  onChange={e => setData('username', e.target.value)}
+                  color={errors.username ? "error" : "default"}
+                  helperText={errors.username}
+                />
               </div>
               <div className="mb-4">
-                <Label htmlFor="nama" className="sr-only">
-                  Nama
-                </Label>
-                <Input type="text" id="nama" placeholder="Nama" />
+                <Label htmlFor="name" className="sr-only">Nama</Label>
+                <Input
+                  isRequired
+                  label="Nama"
+                  type="text"
+                  value={data.name}
+                  onChange={e => setData('name', e.target.value)}
+                  color={errors.name ? "error" : "default"}
+                  helperText={errors.name}
+                />
               </div>
               <div className="mb-4">
-                <Label htmlFor="email" className="sr-only">
-                  Email
-                </Label>
-                <Input type="email" id="email" placeholder="Email" />
+                <Label htmlFor="email" className="sr-only">Email</Label>
+                <Input
+                  isRequired
+                  label="Email"
+                  type="email"
+                  value={data.email}
+                  onChange={e => setData('email', e.target.value)}
+                  color={errors.email ? "error" : "default"}
+                  helperText={errors.email}
+                />
               </div>
               <div className="mb-4">
-                <Label htmlFor="password" className="sr-only">
-                  Password
-                </Label>
-                <Input type="password" id="password" placeholder="Password" />
+                <Label htmlFor="password" className="sr-only">Password</Label>
+                <Input
+                  isRequired
+                  label="Password"
+                  type="password"
+                  value={data.password}
+                  onChange={e => setData('password', e.target.value)}
+                  color={errors.password ? "error" : "default"}
+                  helperText={errors.password}
+                />
               </div>
               <div className="mb-4">
-                <Label htmlFor="confirmPassword" className="sr-only">
-                  Konfirmasi Password
-                </Label>
-                <Input type="password" id="confirmPassword" placeholder="Konfirmasi Password" />
+                <Label htmlFor="password_confirmation" className="sr-only">Konfirmasi Password</Label>
+                <Input
+                  isRequired
+                  label="Konfirmasi Password"
+                  type="password"
+                  value={data.password_confirmation}
+                  onChange={e => setData('password_confirmation', e.target.value)}
+                  color={errors.password_confirmation ? "error" : "default"}
+                  helperText={errors.password_confirmation}
+                />
               </div>
               <div className="grid">
-                <Button>Daftar</Button>
+                <Button color="primary" type="submit" isLoading={processing}>Daftar</Button>
               </div>
             </form>
             {/* End Form */}
@@ -108,4 +151,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Register;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { useForm, Link } from '@inertiajs/react';
 import AdminLayout from '@/Layout/AdminLayout';
-import { Link } from '@inertiajs/react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,39 +12,108 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Pastikan komponen-komponen ini tersedia di proyek Anda
+} from "@/components/ui/select";
+import { Button } from '@/Components/ui/button';
 
-const MultimediaEdit = () => {
-  const [type, setType] = useState('video');
+const MultimediaEdit = ({ multimedia }) => {
+  const [type, setType] = useState(multimedia.type || 'video');  // Set initial type from multimedia data
+  const [selectedType, setSelectedType] = useState(multimedia.type || '');
+
+  const { data, setData, post, put, processing, errors } = useForm({
+    thumbnail: null,
+    title: multimedia.title || '',  // Initial value from multimedia data
+    description: multimedia.description || '',
+    type: multimedia.type || 'video',
+    content: multimedia.content || '',
+  });
+
+  function submit(e) {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('thumbnail', data.thumbnail);
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('type', data.type);
+    formData.append('content', type === 'poster' && data.content instanceof File ? data.content : data.content);
+
+    // Pastikan menggunakan metode `put` untuk pengiriman data
+    put(`/dashboard/multimedia/manajemen-multimedia/edit/${multimedia.slug}`, formData, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
 
   return (
     <AdminLayout>
-      <div className="flex flex-1 flex-col gap-4 p-4">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div className="aspect-auto rounded-xl flex items-center">
-            <Link href='/dashboard/multimedia/daftar-multimedia/' className='border border-slate-950 py-1.5 px-4 inline-block rounded-lg'>
-              Kembali
+      <div className="flex flex-col flex-1 gap-4 p-4">
+        <div className="grid gap-4 auto-rows-min md:grid-cols-3">
+          <div className="flex items-center aspect-auto rounded-xl">
+            <Link href='/dashboard/multimedia/manajemen-multimedia/'>
+              <Button variant="outline">Kembali</Button>
             </Link>
           </div>
-          <div className="aspect-auto">
-            Edit Data Multimedia
-          </div>
-          <div className="aspect-auto rounded-xl bg-muted/50" />
+          <div className="text-xl font-semibold aspect-auto">Perbarui Data Multimedia</div>
         </div>
         <div className="min-h-[100vh] flex-1 md:min-h-min p-4">
-          <form className="w-full max-w-lg md:max-w-2xl space-y-4">
+          <div>
+            <img src={`/storage/${multimedia.thumbnail}`} alt="" className='mb-4 aspect-video max-w-[500px] rounded object-cover object-top' />
+          </div>
+          <form onSubmit={submit} className="w-full mx-auto space-y-4">
+            {/* Thumbnail */}
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="thumbnail">Thumbnail</Label>
+              <Input 
+                id="thumbnail" 
+                type="file"
+                onChange={e => setData('thumbnail', e.target.files[0])}
+              />
+              {errors.thumbnail && <div>{errors.thumbnail}</div>}
+            </div>
+
+            {/* Judul */}
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="title" className='mb-2'>Judul</Label>
-              <Input type="text" id="title" placeholder="Judul" className="w-full border border-slate-950 rounded-lg h-12" />
+              <Input 
+                type="text" 
+                id="title" 
+                placeholder="Judul" 
+                value={data.title}  // Update to use data.title
+                onChange={e => setData('title', e.target.value)}
+              />
+              {errors.title && (
+                <div className="p-2 text-sm text-red-600 bg-red-100 rounded-md">
+                  {errors.title}
+                </div>
+              )}
             </div>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="description" className='mb-2 mt-4'>Deskripsi</Label>
-              <Textarea id="description" placeholder="Deskripsi" className="w-full border border-slate-950 rounded-lg h-32" />
+
+            <div className="grid items-center w-full gap-2">
+              <Label htmlFor="description" className='text-sm font-medium'>Deskripsi</Label>
+              <Textarea
+                id="description"
+                placeholder="Masukkan deskripsi materi di sini."
+                value={data.description}  // Update to use data.description
+                onChange={(e) => setData('description', e.target.value)}
+                rows={5}
+                className="p-2 text-sm border border-gray-300 rounded-md"
+              />
+              {errors.description && <div className="text-sm text-red-500">{errors.description}</div>}
             </div>
+
+            {/* Tipe Konten */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="type" className='mb-2 mt-4'>Tipe Konten</Label>
-              <Select onValueChange={(value) => setType(value)}>
-                <SelectTrigger className="w-full border border-slate-950 rounded-lg h-12">
+              <Label htmlFor="type" className="mt-4 mb-2">Tipe Konten</Label>
+              <Select 
+                onValueChange={(value) => {
+                  setSelectedType(value);
+                  setData('type', value);
+                }}
+                value={selectedType}
+              >
+                <SelectTrigger>
                   <SelectValue placeholder="Pilih Tipe Konten" />
                 </SelectTrigger>
                 <SelectContent>
@@ -56,20 +125,52 @@ const MultimediaEdit = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              {errors.type && <div>{errors.type}</div>}
             </div>
+
+            {/* Konten */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="content" className='mb-2 mt-4'>Konten</Label>
-              {type === 'poster' ? (
-                <Input id="content" type="file" className="w-full border border-slate-950 rounded-lg" />
+              <Label htmlFor="content" className='mt-4 mb-2'>Konten</Label>
+              {selectedType === 'poster' ? (
+                <>
+                  <Input 
+                    id="content" 
+                    type="file" 
+                    onChange={e => setData('content', e.target.files[0])} 
+                  />
+                  {multimedia.type === 'poster' && 
+                    <div>
+                      <img src={`/storage/${multimedia.content}`} alt="" className='mt-4 max-w-[500px] rounded' />
+                    </div>
+                  }
+                </>
               ) : (
-                <Input type="url" id="content" placeholder="Masukkan URL" className="w-full border border-slate-950 rounded-lg h-12" />
+                <Input 
+                  type="url" 
+                  id="content" 
+                  placeholder="Masukkan URL" 
+                  value={data.content}  // Update to use data.content
+                  onChange={e => setData('content', e.target.value)} 
+                />
               )}
+              {errors.content && <div>{errors.content}</div>}
             </div>
+
+            {/* Submit Button */}
             <div className="flex justify-end">
-              <button type="submit" className="mt-4 py-2 px-4 bg-slate-950 text-white rounded-lg hover:bg-slate-800">
-                Simpan Perubahan
-              </button>
+              <Button
+                className='rounded-md bg-slate-950 hover:bg-slate-800'
+                type="submit" 
+                disabled={processing}
+              >
+                Simpan
+              </Button>
             </div>
+            {errors.general && (
+              <div className="p-4 text-red-500 bg-red-100 rounded-lg">
+                {errors.general}
+              </div>
+            )}
           </form>
         </div>
       </div>

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class MateriController extends Controller
 {
@@ -12,7 +13,14 @@ class MateriController extends Controller
      */
     public function index()
     {
-        return inertia('User/Materi/MateriMain');
+        $user = Auth::user();
+
+        return inertia('User/Materi/MateriMain', [
+            'auth' => [
+                'user' => $user,
+                'isTeacherApproved' => $user && $user->teacher ? $user->teacher->status === 'approved' : false,
+            ],
+        ]);
     }
 
     /**

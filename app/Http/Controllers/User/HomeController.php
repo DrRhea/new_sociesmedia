@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Materi;
+use App\Models\Artikel;
+use App\Models\Multimedia;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -12,7 +15,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return inertia('User/Beranda/BerandaMain');
+        $multimediaVideo = Multimedia::where('type', 'video')->latest()->first();
+        $multimediaPodcast = Multimedia::where('type', 'podcast')->latest()->first();
+        $multimediaPoster = Multimedia::where('type', 'poster')->latest()->first();
+        $multimediaGames = Multimedia::where('type', 'games')->latest()->first();
+
+        $materiLatest = Materi::latest()->take(4)->get();
+        $artikelLatest = Artikel::latest()->take(4)->get();
+
+        return inertia('User/Beranda/BerandaMain', [
+            'multimediaVideo' => $multimediaVideo,
+            'multimediaPodcast' => $multimediaPodcast,
+            'multimediaPoster' => $multimediaPoster,
+            'multimediaGames' => $multimediaGames,
+            'materiLatest' => $materiLatest,
+            'artikelLatest' => $artikelLatest
+        ]);
     }
 
     /**

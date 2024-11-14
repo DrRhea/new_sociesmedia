@@ -16,10 +16,18 @@ class SuperadminSeeder extends Seeder
      */
     public function run(): void
     {
-        $superadmin = User::where('role', 'superadmin')->first();
+        // Membuat superadmin
+        $user = User::create([
+            'username' => 'superadmin',
+            'name' => 'Diana Anggraini',
+            'email' => 'diana.anggraini@upi.edu',
+            'password' => Hash::make('dikti2004'),
+            'role' => 'superadmin',
+            'is_profile_complete' => 1,
+        ]);
 
-        Superadmin::create([
-            'user_id' => $superadmin->id,
+        SuperAdmin::create([
+            'user_id' => $user->id,
         ]);
     }
 }

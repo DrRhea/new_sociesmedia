@@ -8,7 +8,7 @@ import PenelitiHero from './PenelitiHero';
 import PenelitiProfile from './PenelitiProfile';
 
 
-const PenelitiMain = () => {
+const PenelitiMain = ({ peneliti }) => {
     return (
         <>
             <Head>
@@ -17,7 +17,7 @@ const PenelitiMain = () => {
             </Head>
             <UserLayout>
                 <PenelitiHero/>
-                <PenelitiProfile/>
+                <PenelitiProfile peneliti={peneliti}/>
         </UserLayout>
         </>
     );

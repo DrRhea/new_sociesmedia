@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import { GalleryVerticalEnd, ChevronDown } from "lucide-react"; // Tambahkan ChevronDown
 import {
   Sidebar,
@@ -12,7 +13,6 @@ import {
   SidebarGroup,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -22,7 +22,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu"; 
-
 import {
   Collapsible,
   CollapsibleContent,
@@ -33,7 +32,6 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "@/components/ui/avatar"; 
-
 import {
   Sparkles,
   BadgeCheck,
@@ -42,74 +40,82 @@ import {
   LogOut,
   ChevronsUpDown,
 } from "lucide-react"; 
-import { Link } from "@inertiajs/react";
-
-const data = {
-  user: {
-    name: "Arya Jagadditha",
-    email: "user@example.com",
-    avatar: "https://via.placeholder.com/150",
-  },
-  navMain: [
-    {
-      title: "Beranda",
-      url: "#",
-      items: [
-        { title: "Konten Halaman", url: "/dashboard/beranda/" },
-      ],
-    },
-    {
-      title: "Multimedia",
-      url: "#",
-      items: [
-        { title: "Konten Halaman", url: "/dashboard/multimedia/konten-halaman" },
-        { title: "Daftar Multimedia", url: "/dashboard/multimedia/daftar-multimedia" },
-      ],
-    },
-    {
-      title: "Materi",
-      url: "#",
-      items: [
-        { title: "Konten Halaman", url: "/dashboard/materi/konten-halaman" },
-        { title: "Daftar Materi", url: "/dashboard/materi/daftar-materi" },
-      ],
-    },
-    {
-      title: "Forum Diskusi",
-      url: "#",
-      items: [
-        { title: "Konten Halaman", url: "#" },
-        { title: "Daftar Forum", url: "#" },
-      ],
-    },
-    {
-      title: "Artikel",
-      url: "#",
-      items: [
-        { title: "Konten Halaman", url: "/dashboard/artikel/konten-halaman" },
-        { title: "Daftar Artikel", url: "/dashboard/artikel/daftar-artikel" },
-      ],
-    },
-    {
-      title: "Peneliti",
-      url: "#",
-      items: [
-        { title: "Konten Halaman", url: "/dashboard/peneliti/konten-halaman" },
-        { title: "Daftar Peneliti", url: "/dashboard/peneliti/daftar-peneliti" },
-      ],
-    },
-    {
-      title: "Daftar Pengguna",
-      url: "#",
-      items: [
-        { title: "Daftar Siswa", url: "#" },
-        { title: "Daftar Guru", url: "#" },
-      ],
-    },
-  ],
-};
 
 export default function AppSidebar() {
+  const { post } = useForm();
+  const { auth } = usePage().props;
+
+  // Data menu dinamis berdasarkan peran pengguna
+  const data = {
+    user: {
+      name: auth.user.name,
+      email: auth.user.email,
+      avatar: auth.user.avatar,
+    },
+    navMain: [
+      {
+        title: "Beranda",
+        url: "#",
+        items: [
+          { title: "Konten Halaman", url: "/dashboard/beranda/" },
+        ],
+      },
+      {
+        title: "Multimedia",
+        url: "#",
+        items: [
+            { title: "Kelola Konten Tampilan", url: "/dashboard/multimedia/manajemen-multimedia" },
+            { title: "Manajemen Multimedia", url: "/dashboard/multimedia/manajemen-multimedia" },
+            { title: "Persetujuan Konten", url: "/dashboard/multimedia/manajemen-multimedia" },
+        ],
+      },    
+      {
+        title: "Materi",
+        url: "#",
+        items: [
+          { title: "Kelola Konten Tampilan", url: "/dashboard/materi/daftar-materi" },
+          { title: "Manajemen Materi", url: "/dashboard/materi/daftar-materi" },
+          { title: "Persetujuan Konten", url: "/dashboard/materi/daftar-materi" },
+        ],
+      },
+      {
+        title: "Forum Diskusi",
+        url: "#",
+        items: [
+          { title: "Daftar Forum", url: "#" },
+        ],
+      },
+      {
+        title: "Artikel",
+        url: "#",
+        items: [
+          { title: "Daftar Artikel", url: "/dashboard/artikel/daftar-artikel" },
+        ],
+      },
+      {
+        title: "Peneliti",
+        url: "#",
+        items: [
+          { title: "Daftar Peneliti", url: "/dashboard/peneliti/daftar-peneliti" },
+        ],
+      },
+      {
+        title: "Daftar Pengguna",
+        url: "#",
+        items: [
+          { title: "Daftar Siswa", url: "/dashboard/siswa" },
+          { title: "Daftar Guru", url: "/dashboard/guru" },
+          ...(auth.user.role === 'superadmin' ? [{ title: "Daftar Admin", url: "/dashboard/admin" }] : []), // Tambahkan kondisi ini
+        ],
+      },
+    ],
+  };
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    post('/logout');
+  };
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -117,7 +123,7 @@ export default function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <div className="flex items-center justify-center rounded-lg aspect-square size-8 bg-sidebar-primary text-sidebar-primary-foreground">
                   <GalleryVerticalEnd className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
@@ -131,32 +137,40 @@ export default function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu className="gap-2">
-            {data.navMain.map((item) => (
-              <React.Fragment key={item.title}>
-                {/* Collapsible untuk setiap grup */}
-                <Collapsible defaultOpen>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full">
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild>
-                        <Link href={item.url} className="font-medium flex">
-                          {item.title}
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                      <ChevronDown className="ml-2 text-gray-400" />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    {item.items.map((subItem) => (
-                      <SidebarMenuItem key={subItem.title}>
-                        <SidebarMenuButton asChild>
-                          <Link href={subItem.url}>{subItem.title}</Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </CollapsibleContent>
-                </Collapsible>
-              </React.Fragment>
-            ))}
+            {data.navMain.map((item) => {
+              const [isOpen, setIsOpen] = React.useState(true); // Set default to true
+
+              const handleToggle = () => {
+                setIsOpen(!isOpen); // Toggle state
+              };
+
+              return (
+                <React.Fragment key={item.title}>
+                  <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+                    <CollapsibleTrigger asChild>
+                      <div className="flex items-center justify-between w-full cursor-pointer" onClick={handleToggle}>
+                        <SidebarMenuItem className="w-full">
+                          <SidebarMenuButton className='flex justify-between font-medium'>
+                            {item.title}
+                            <ChevronDown className={`ml-2 w-5 text-slate-950 transition-transform duration-200 ${isOpen ? '-rotate-90' : ''}`} />
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      </div>
+                    </CollapsibleTrigger>
+                    
+                    <CollapsibleContent>
+                      {item.items.map((subItem) => (
+                        <SidebarMenuItem key={subItem.title}>
+                          <SidebarMenuButton asChild>
+                            <Link href={subItem.url}>{subItem.title}</Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+                </React.Fragment>
+              );
+            })}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
@@ -169,16 +183,16 @@ export default function AppSidebar() {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={data.user.avatar} alt={data.user.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <Avatar className="w-8 h-8 rounded-lg">
+                    <AvatarImage src={auth.user.avatar} alt={auth.user.name} />
+                    <AvatarFallback className="rounded-lg"></AvatarFallback>
                   </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {data.user.name}
+                  <div className="grid flex-1 text-sm leading-tight text-left">
+                    <span className="font-semibold truncate">
+                      {auth.user.name}
                     </span>
-                    <span className="truncate text-xs">
-                      {data.user.email}
+                    <span className="text-xs truncate">
+                      {auth.user.email}
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
@@ -192,46 +206,42 @@ export default function AppSidebar() {
               >
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage src={data.user.avatar} alt={data.user.name} />
-                      <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                    <Avatar className="w-8 h-8 rounded-lg">
+                      <AvatarImage src={auth.user.avatar} alt={auth.user.name} />
+                      <AvatarFallback className="rounded-lg"></AvatarFallback>
                     </Avatar>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
-                        {data.user.name}
+                    <div className="grid flex-1 text-sm leading-tight text-left">
+                      <span className="font-semibold truncate">
+                        {auth.user.name}
                       </span>
-                      <span className="truncate text-xs">
-                        {data.user.email}
+                      <span className="text-xs truncate">
+                        {auth.user.email}
                       </span>
                     </div>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Sparkles />
-                    Upgrade to Pro
-                  </DropdownMenuItem>
+                  <Link href="/">
+                    <DropdownMenuItem>
+                      Kembali ke halaman utama
+                    </DropdownMenuItem>
+                  </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <BadgeCheck />
-                    Account
+                    Notifkasi
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <CreditCard />
-                    Billing
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Bell />
-                    Notifications
+                    Profil Akun
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut />
-                  Log out
+                <DropdownMenuItem onClick={handleLogout}>
+                  <button className="flex items-center">
+                    <span>Log out</span>
+                  </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

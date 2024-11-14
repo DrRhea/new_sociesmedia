@@ -5,15 +5,23 @@ import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
 const faqs = [
   {
     question: "Apa itu Sociesmedia?",
-    answer: "Sociesmedia adalah platform yang menyediakan berbagai informasi dan materi terbaru untuk membantu pengguna dalam berbagai topik.",
+    answer: "Sociesmedia adalah platform pembelajaran yang menyediakan berbagai media pembelajaran interaktif, termasuk video, podcast, dan materi tertulis, untuk membantu siswa memahami pelajaran dengan cara yang menyenangkan dan efektif.",
   },
   {
-    question: "Bagaimana cara mengunduh materi?",
-    answer: "Anda dapat mengunduh materi dengan menekan tombol 'Unduh' yang tersedia pada setiap materi di halaman utama kami.",
+    question: "Bagaimana cara mengakses materi di Sociesmedia?",
+    answer: "Cukup pilih kelas yang Anda inginkan (Kelas VII, VIII, IX) dan akses materi sesuai dengan topik yang Anda butuhkan. Semua materi disajikan dengan mudah dipahami dan dapat diunduh untuk penggunaan offline.",
   },
   {
-    question: "Apakah Sociesmedia gratis?",
-    answer: "Ya, Sociesmedia menyediakan beberapa materi dan informasi secara gratis. Namun, ada juga konten premium yang memerlukan langganan.",
+    question: "Apakah saya harus membayar untuk mengakses materi di Sociesmedia?",
+    answer: "Sebagian besar materi di Sociesmedia dapat diakses secara gratis. Namun, kami juga menyediakan materi premium yang lebih mendalam dan khusus untuk pengembangan lebih lanjut yang memerlukan langganan.",
+  },
+  {
+    question: "Bagaimana cara mengunduh materi di Sociesmedia?",
+    answer: "Untuk mengunduh materi, cukup pilih materi yang Anda inginkan, dan tekan tombol 'Unduh' yang tersedia di setiap halaman materi. Pastikan Anda sudah terdaftar dan login untuk menikmati fitur ini.",
+  },
+  {
+    question: "Apakah Sociesmedia hanya untuk siswa?",
+    answer: "Tidak! Meskipun Sociesmedia berfokus pada materi pembelajaran untuk siswa, guru dan pengajar juga dapat memanfaatkan platform ini untuk menemukan referensi dan materi ajar yang berkualitas.",
   }
 ];
 

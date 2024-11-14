@@ -1,13 +1,15 @@
 import React from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Image, Button } from "@nextui-org/react";
+import { Card, CardHeader, Image } from "@nextui-org/react";
 
 const BerandaArtikel = () => {
     return (
         <div className="max-w-screen-xl p-4 mx-auto">
             {/* Header section with title and link */}
-            <div className="flex items-center justify-between px-8 mb-8">
+            <div className="px-8 mb-8">
                 <h1 className="text-3xl font-semibold text-left">Artikel Terkini</h1>
-                <a href="/artikel" className="font-semibold text-purple-600 text-md">Lihat Semua</a>
+                <a href="/artikel" className="font-semibold text-purple-600 text-md block sm:inline sm:absolute sm:right-8 sm:top-4">
+                    Lihat Semua
+                </a>
             </div>
 
             {/* Cards section */}
@@ -24,7 +26,7 @@ const BerandaArtikel = () => {
                         src="https://placehold.co/600x400?text=Sociesmedia"
                     />
                 </Card>
-                
+
                 <Card className="col-span-12 sm:col-span-6 lg:col-span-4 h-[400px] rounded-lg overflow-hidden shadow-md">
                     <CardHeader className="absolute z-10 top-4 left-4 flex-col !items-start">
                         <p className="font-bold uppercase text-tiny text-white/60">Plant a tree</p>
@@ -37,7 +39,7 @@ const BerandaArtikel = () => {
                         src="https://placehold.co/600x400?text=Sociesmedia"
                     />
                 </Card>
-                
+
                 <Card className="col-span-12 sm:col-span-6 lg:col-span-4 h-[400px] rounded-lg overflow-hidden shadow-md">
                     <CardHeader className="absolute z-10 top-4 left-4 flex-col !items-start">
                         <p className="font-bold uppercase text-tiny text-white/60">Supercharged</p>

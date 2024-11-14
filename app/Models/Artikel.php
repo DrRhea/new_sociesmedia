@@ -9,14 +9,12 @@ class Artikel extends Model
 {
     use HasFactory;
 
+    protected $table = 'blogs';
+
     protected $fillable = [
-        'name',
-        'email',
-        'field_of_study',
-        'biography',
-        'contact_info',
-        'picture',
-        'sinta_id',
-        'status',
+        'title',
+        'content',
+        'created_by',
+        'updated_by'
     ]; 
 }

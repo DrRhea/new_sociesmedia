@@ -63,8 +63,23 @@ class PenelitiController extends Controller
     {
         //
     }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function index_daftar()
     {
-        return inertia("Admin/Peneliti/Daftar/PenelitiMain");
+        $researchers = Peneliti::all();
+        return inertia("Admin/Peneliti/Daftar/PenelitiMain", [
+            'researchers' => $researchers,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create_daftar()
+    {
+        return inertia("Admin/Peneliti/Daftar/PenelitiCreate");
     }
 }

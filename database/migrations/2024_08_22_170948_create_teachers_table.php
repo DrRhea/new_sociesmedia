@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
-            $table->string('nip')->nullable();
-            $table->enum('gender', ['male', 'female']);
+            $table->string('nip');
+            $table->string('place');
             $table->date('birth_date');
-            $table->string('phone', 20)->nullable();
-            $table->text('address')->nullable();
-            $table->enum('position', ['class_teacher', 'subject_teacher', 'headmaster']); // Jabatan
+            $table->enum('gender', ['male', 'female']);
+            $table->string('phone', 20);
+            $table->text('address');
+            $table->text('school');
+            $table->enum('position', ['class_teacher', 'subject_teacher', 'headmaster']);
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

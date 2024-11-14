@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -15,51 +17,43 @@ class LoginController extends Controller
         return inertia('Auth/Login');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function login(Request $request)
+    {   
+        // Validasi input
+        $request->validate([
+            'username_or_email' => 'required', // Menggunakan satu field untuk username/email
+            'password' => 'required',
+        ]);
+
+        // Ambil username atau email
+        $usernameOrEmail = $request->username_or_email;
+
+        // Cek apakah input adalah email atau username
+        $field = filter_var($usernameOrEmail, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        // Cek kredensial
+        if (Auth::attempt([$field => $usernameOrEmail, 'password' => $request->password])) {
+            $user = Auth::user(); // Ambil data pengguna yang sedang login
+            
+            // Redirect berdasarkan peran
+            if ($user->role === 'admin' || $user->role === 'superadmin') {
+                return redirect()->intended('/dashboard'); // Arahkan ke dashboard jika admin atau superadmin
+            }
+            
+            // Login berhasil, redirect ke halaman beranda
+            return redirect()->intended('/');
+        }
+
+        // Jika login gagal, lemparkan kesalahan
+        throw ValidationException::withMessages([
+            'username_or_email' => ['Username atau password tidak sesuai.'],
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Tambahkan method untuk logout jika diperlukan
+    public function logout()
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        Auth::logout();
+        return redirect('/login');
     }
 }

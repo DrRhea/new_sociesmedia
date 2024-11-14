@@ -17,9 +17,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'username',
         'name',
         'email',
         'password',
+        'role',
+        'is_profile_complete',
     ];
 
     /**
@@ -43,5 +46,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class, 'user_id');
     }
 }

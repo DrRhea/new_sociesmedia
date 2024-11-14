@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -10,10 +11,12 @@ class UsersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index_guru()
     {
-        //
+        return inertia("Admin/Pengguna/GuruMain");
     }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -61,5 +64,10 @@ class UsersController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function index_siswa()
+    {
+        return inertia("Admin/Pengguna/SiswaMain");
     }
 }

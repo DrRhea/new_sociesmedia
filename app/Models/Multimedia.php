@@ -13,9 +13,11 @@ class Multimedia extends Model
         'type',
         'title',
         'description',
-        'media',
+        'content',
+        'thumbnail',
         'status',
         'slug',
-        'created_by'
+        'created_by',
+        'updated_by'
     ];
 }

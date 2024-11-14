@@ -1,10 +1,19 @@
 import React from 'react';
 import UserLayout from "@/Layout/UserLayout.jsx";
 import MateriHero from "@/Pages/User/Materi/MateriHero.jsx";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import MateriPilihan from './MateriPilihan';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 
 const MateriMain = () => {
+    const { auth } = usePage().props;
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const canAccess = 
+        auth.user && (
+            ['admin', 'superadmin'].includes(auth.user.role) || 
+            (auth.user.role === 'guru' && auth.isTeacherApproved)
+        );
+    
     return (
         <>
             <Head>
@@ -15,15 +24,40 @@ const MateriMain = () => {
             <UserLayout>
                 <MateriHero />
                 <MateriPilihan />
-
-                <a 
-                    href="#"
-                    className="fixed bottom-5 right-5 bg-black text-white p-3 rounded-lg shadow-lg text-center"
-                    style={{ width: '80px', height: '80px' }}
-                >
-                    <div className="text-xs">Kelola</div>
-                    <div className="font-semibold">Materi</div>
-                </a>
+                
+                {canAccess && (
+                    <>
+                        <button
+                            onClick={onOpen}
+                            className="fixed bottom-5 right-5 bg-blue-600/90 hover:bg-blue-500/80 duration-150 text-white p-3 rounded-xl shadow-lg text-center z-50"
+                        >
+                            <p>{'+'} Tambah <strong>Materi</strong> Disini</p>
+                        </button>
+                        
+                        <Modal isOpen={isOpen} backdrop={'blur'} onOpenChange={onOpenChange} placement="bottom-center">
+                            <ModalContent>
+                                {(onClose) => (
+                                    <>
+                                        <ModalHeader className="flex flex-col gap-1">Tambah Materi</ModalHeader>
+                                        <ModalBody>
+                                            <p>
+                                                Silakan tambahkan materi baru di sini. Masukkan informasi yang diperlukan di formulir di bawah ini.
+                                            </p>
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <Button color="danger" variant="light" onPress={onClose}>
+                                                Batal
+                                            </Button>
+                                            <Button color="primary" onPress={onClose}>
+                                                Simpan
+                                            </Button>
+                                        </ModalFooter>
+                                    </>
+                                )}
+                            </ModalContent>
+                        </Modal>
+                    </>
+                )}
             </UserLayout>
         </>
     );

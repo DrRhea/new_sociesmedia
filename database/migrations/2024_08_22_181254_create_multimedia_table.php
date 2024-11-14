@@ -17,11 +17,12 @@ return new class extends Migration
       $table->text('description')->nullable();
       $table->string('content');
       $table->enum('type', ['video', 'podcast', 'poster', 'games']);
-      $table->string('thumbnail', 255);
+      $table->string('thumbnail', 255)->nullable();
       $table->string('slug');
       $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+      $table->enum('status', ['active', 'inactive'])->default('pending');
       $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
-      $table->foreignId('updated_by')->constrained('users')->onDelete('cascade')->nullable();
+      $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('cascade');
       $table->timestamps();
     });
   }

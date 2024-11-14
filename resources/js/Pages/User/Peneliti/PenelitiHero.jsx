@@ -5,14 +5,14 @@ const PenelitiHero = () => {
   return (
     <main>
     <div className="w-full max-w-screen-lg mx-auto lg:my-6">
-        <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-5">
+        <Card isFooterBlurred className="w-full col-span-12 sm:col-span-5 rounded-none lg:rounded-2xl overflow-hidden">
             <Image
                 removeWrapper
                 alt="Konten Peneliti"
                 className="z-0 object-cover w-full h-full scale-125 -translate-y-6"
-                src="https://placehold.co/600x400?text=Peneliti"
+                src="/img/banner/peneliti.webp"
             />
-            <CardFooter className="absolute bottom-0 z-10 justify-between bg-white/30 border-t-1 border-zinc-100/50">
+            <CardFooter className="absolute bottom-0 z-10 justify-between bg-white/30 border-t-1 border-zinc-100/50 rounded-none">
                 <div>
                     <p className="text-black text-tiny">Jelajahi Peneliti</p>
                     <p className="text-black text-tiny">Menarik dan Inspiratif di Halaman ini</p>

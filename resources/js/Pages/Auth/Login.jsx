@@ -1,16 +1,27 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useForm } from '@inertiajs/react';
+import { Input as NextInput } from "@nextui-org/react";
+import { Button as NextButton } from "@nextui-org/react";
 import { Separator } from "@/components/ui/separator";
+import Footer from '@/Components/Footer';
 
 export default function HeroFormImageAndForm() {
+  const { data, setData, post, processing, errors } = useForm({
+    email: '',
+    password: '',
+  });
+
+  function submit(e) {
+    e.preventDefault();
+    post('/login'); // Endpoint for login
+  }
+
   return (
     <>
       {/* Hero */}
       <div className="flex min-h-screen">
         <img
           className="hidden md:block md:w-1/2 h-full object-cover"
-          src="https://placehold.co/700x800"
+          src="/img/auth/login.webp"
           alt="image description"
         />
         <div className="flex flex-1 items-center justify-center p-8">
@@ -24,7 +35,7 @@ export default function HeroFormImageAndForm() {
             </p>
             {/* End Title */}
             <div className="mt-8 grid">
-              <Button variant={"outline"}>
+              <NextButton className='bg-white border-2 border-blue-100 hover:bg-gray-50' onClick={() => window.location.href='/login/google'}>
                 <svg
                   className="w-4 h-auto mr-2"
                   width={46}
@@ -51,7 +62,7 @@ export default function HeroFormImageAndForm() {
                   />
                 </svg>
                 Masuk dengan Google
-              </Button>
+              </NextButton>
             </div>
             <Separator asChild className="my-6 bg-background">
               <div className="py-3 flex items-center text-xs text-muted-foreground uppercase before:flex-[1_1_0%] before:border-t before:border-gray-200 before:mr-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ml-6 dark:before:border-gray-700 dark:after:border-gray-700">
@@ -59,21 +70,29 @@ export default function HeroFormImageAndForm() {
               </div>
             </Separator>
             {/* Form */}
-            <form>
+            <form onSubmit={submit}>
               <div className="mb-4">
-                <Label htmlFor="email" className="sr-only">
-                  Email
-                </Label>
-                <Input type="email" id="email" placeholder="Email atau username" />
+                <NextInput
+                  isRequired
+                  type="text"
+                  label="Username atau Email"
+                  value={data.username_or_email}
+                  onChange={e => setData('username_or_email', e.target.value)}
+                />
               </div>
               <div className="mb-4">
-                <Label htmlFor="password" className="sr-only">
-                  Password
-                </Label>
-                <Input type="password" id="password" placeholder="Password" />
+                <NextInput
+                  isRequired
+                  type="password"
+                  label="Password"
+                  value={data.password}
+                  onChange={e => setData('password', e.target.value)}
+                />
               </div>
               <div className="grid">
-                <Button>Masuk</Button>
+                <NextButton type="submit" color="primary" isLoading={processing}>
+                  Masuk
+                </NextButton>
               </div>
             </form>
             {/* End Form */}
@@ -83,6 +102,9 @@ export default function HeroFormImageAndForm() {
             </p>
           </div>
         </div>
+      </div>
+      <div className='mt-4'>
+        <Footer/>
       </div>
       {/* End Hero */}
     </>
