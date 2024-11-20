@@ -65,8 +65,9 @@ const Footer = () => {
                     </div>
                 </nav>
                 <p className="mt-8 text-base leading-6 text-center text-gray-400">
-                    © 2024 Sociesmedia, Inc. All rights reserved.
+                    &#169; 2024 Sociesmedia, Inc. Semua hak dilindungi undang-undang.
                 </p>
+
             </div>
         </footer>
     );

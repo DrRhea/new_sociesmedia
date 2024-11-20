@@ -1,25 +1,40 @@
-import React, { useState } from 'react';
-import { Card, CardBody, CardFooter, Image, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input, Pagination } from "@nextui-org/react";
+import React, { useState, useEffect } from 'react';
+import { Card, CardBody, CardFooter, Image, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Input } from "@nextui-org/react";
 import { Link } from "@inertiajs/react";
 
-const MateriPilihan = () => {
+const MateriPilihan = ({ materi }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [filteredMateri, setFilteredMateri] = useState(materi);
 
-  const list = [
-    { title: "Materi A", img: "https://placehold.co/600x400?text=MateriA", category: 'kelasVII', status: 'available' },
-    { title: "Materi B", img: "https://placehold.co/600x400?text=MateriB", category: 'kelasVIII', status: 'unavailable' },
-    { title: "Materi C", img: "https://placehold.co/600x400?text=MateriC", category: 'kelasIX', status: 'available' },
-    { title: "Materi D", img: "https://placehold.co/600x400?text=MateriD", category: 'kelasVII', status: 'available' },
-    // More items...
-  ];
+  useEffect(() => {
+    filterMateri();
+  }, [searchQuery, categoryFilter, statusFilter]);
 
-  const filteredList = list.filter(item => 
-    (activeTab === 'all' || item.category === activeTab) &&
-    item.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-    (categoryFilter ? item.category === categoryFilter : true)
-  );
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filterMateri = () => {
+    let filtered = materi;
+
+    // Filter berdasarkan pencarian
+    if (searchQuery) {
+      filtered = filtered.filter(item =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Filter berdasarkan kategori
+    if (categoryFilter) {
+      filtered = filtered.filter(item =>
+        item.grade.toLowerCase() === categoryFilter.toLowerCase()
+      );
+    }
+
+    setFilteredMateri(filtered);
+  };
 
   return (
     <div className="bg-white">
@@ -38,7 +53,7 @@ const MateriPilihan = () => {
                 isClearable
                 className="w-full sm:max-w-[44%]"
                 placeholder="Cari berdasarkan judul..."
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearch}
                 value={searchQuery}
               />
 
@@ -51,40 +66,33 @@ const MateriPilihan = () => {
                     aria-label="Filter berdasarkan kategori"
                     onAction={setCategoryFilter}
                   >
+                    <DropdownItem key="">Semua Kategori</DropdownItem>
                     <DropdownItem key="kelasVII">Kelas VII</DropdownItem>
                     <DropdownItem key="kelasVIII">Kelas VIII</DropdownItem>
                     <DropdownItem key="kelasIX">Kelas IX</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-
-                <Dropdown>
-                  <DropdownTrigger>
-                    <Button variant="flat">Status</Button>
-                  </DropdownTrigger>
-                  <DropdownMenu
-                    aria-label="Filter berdasarkan status"
-                    onAction={setCategoryFilter}
-                  >
-                    <DropdownItem key="available">Tersedia</DropdownItem>
-                    <DropdownItem key="unavailable">Tidak Tersedia</DropdownItem>
+                    <DropdownItem key="umum">Umum</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredList.map((item, index) => (
-                <Link href="#" key={index} className="block group">
-                  <Card isPressable isHoverable>
-                    <CardBody>
-                      <Image src={item.img} alt={item.title} />
-                    </CardBody>
-                    <CardFooter>
-                      <h2 className="text-lg font-bold">{item.title}</h2>
-                      <p className="text-sm capitalize">{item.category}</p>
-                    </CardFooter>
-                  </Card>
-                </Link>
+              {filteredMateri.map((item, index) => (
+                <div key={index}>
+                  <Link href={`/materi/${item.slug}`} className="block group">
+                    <Card isHoverable>
+                      <CardBody>
+                        <Image src={`/storage/${item.thumbnail}`} alt={item.title} />
+                      </CardBody>
+                      <CardFooter>
+                        <h2 className="text-lg font-bold">{item.title}</h2>
+                      </CardFooter>
+                      <span className="absolute z-20 px-3 py-2 text-sm text-white capitalize rounded-full bg-blue-500/90 top-4 right-4">
+                        {item.grade}
+                      </span>
+                    </Card>
+                  </Link>
+                </div>
               ))}
             </div>
           </div>

@@ -24,9 +24,7 @@ const Main = ({ multimedia }) => {
       </Head>
       <section className='flex flex-col max-w-xl gap-4 mx-auto my-8 max-md:px-8'>
         <Link href='/multimedia'>
-          <Button variant="bordered" startContent='<-' className='text-gray-600 w-fit'>
-            {'<-'} Kembali
-          </Button>
+            <i class='bx bx-chevron-left'></i> Kembali
         </Link>
           <Card className='mx-auto w-fit'>
             <CardBody className='text-center'>
@@ -114,9 +112,7 @@ const Main = ({ multimedia }) => {
           </CardBody>
         </Card>
         <Link href='/multimedia' className='mt-4'>
-          <Button variant="bordered" startContent='<-' className='text-gray-600 w-fit'>
-            {'<-'} Kembali
-          </Button>
+            <i class='bx bx-chevron-left'></i> Kembali
         </Link>
       </section>
     </UserLayout>

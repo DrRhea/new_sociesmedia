@@ -20,7 +20,7 @@ class HomeController extends Controller
         $multimediaPoster = Multimedia::where('type', 'poster')->latest()->first();
         $multimediaGames = Multimedia::where('type', 'games')->latest()->first();
 
-        $materiLatest = Materi::latest()->take(4)->get();
+        $materiLatest = Materi::where('status', 'approved')->latest()->take(4)->get();
         $artikelLatest = Artikel::latest()->take(4)->get();
 
         return inertia('User/Beranda/BerandaMain', [

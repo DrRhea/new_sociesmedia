@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, Image } from "@nextui-org/react";
+import { Link } from '@inertiajs/react';
 
 const BerandaArtikel = () => {
     return (
@@ -7,9 +8,9 @@ const BerandaArtikel = () => {
             {/* Header section with title and link */}
             <div className="px-8 mb-8">
                 <h1 className="text-3xl font-semibold text-left">Artikel Terkini</h1>
-                <a href="/artikel" className="font-semibold text-purple-600 text-md block sm:inline sm:absolute sm:right-8 sm:top-4">
+                <Link href="/artikel" className="block font-semibold text-purple-600 text-md sm:inline sm:absolute sm:right-8 sm:top-4">
                     Lihat Semua
-                </a>
+                </Link>
             </div>
 
             {/* Cards section */}

@@ -10,10 +10,11 @@ const PenelitiCreate = () => {
   const { data, setData, post, processing, errors } = useForm({
     name: '',
     email: '',
-    fieldOfStudy: '',
+    field_of_study: '',
     biography: '',
-    contactInfo: '',
+    contact_info: '',
     picture: null,
+    sinta_id: '',
   });
 
   function submit(e) {
@@ -22,13 +23,13 @@ const PenelitiCreate = () => {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('email', data.email);
-    formData.append('field_of_study', data.fieldOfStudy);
+    formData.append('field_of_study', data.field_of_study);
     formData.append('biography', data.biography);
-    formData.append('contact_info', data.contactInfo);
+    formData.append('contact_info', data.contact_info);
     formData.append('picture', data.picture);
+    formData.append('sinta_id', data.sinta_id);
 
-    post('/dashboard/peneliti/daftar-peneliti/create', {
-      data: formData,
+    post('/dashboard/peneliti/manajemen-peneliti/tambah-peneliti', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -37,17 +38,29 @@ const PenelitiCreate = () => {
 
   return (
     <AdminLayout>
-      <div className="flex flex-1 flex-col gap-4 p-4">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div className="aspect-auto rounded-xl flex items-center">
-            <Link href='/dashboard/peneliti/daftar-peneliti/'>
+      <div className="flex flex-col flex-1 gap-4 p-4">
+        <div className="grid gap-4 auto-rows-min md:grid-cols-3">
+          <div className="flex items-center aspect-auto rounded-xl">
+            <Link href='/dashboard/peneliti/manajemen-peneliti/'>
               <Button variant="outline">Kembali</Button>
             </Link>
           </div>
-          <div className="aspect-auto font-semibold text-xl">Tambah Data Peneliti</div>
+          <div className="text-xl font-semibold aspect-auto">Tambah Data Peneliti</div>
         </div>
         <div className="min-h-[100vh] flex-1 md:min-h-min p-4">
           <form onSubmit={submit} className="w-full mx-auto space-y-4">
+
+            {/* Foto */}
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="picture" className='mb-2'>Foto</Label>
+              <Input 
+                type="file" 
+                id="picture" 
+                onChange={e => setData('picture', e.target.files[0])} 
+              />
+              {errors.picture && <div className="text-red-500">{errors.picture}</div>}
+            </div>
+            
             {/* Nama */}
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="name" className='mb-2'>Nama</Label>
@@ -81,21 +94,21 @@ const PenelitiCreate = () => {
                 type="text" 
                 id="field_of_study" 
                 placeholder="Bidang Studi" 
-                value={data.fieldOfStudy} 
-                onChange={e => setData('fieldOfStudy', e.target.value)} 
+                value={data.field_of_study} 
+                onChange={e => setData('field_of_study', e.target.value)} 
               />
-              {errors.fieldOfStudy && <div className="text-red-500">{errors.fieldOfStudy}</div>}
+              {errors.field_of_study && <div className="text-red-500">{errors.field_of_study}</div>}
             </div>
 
             {/* Biografi */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="biography" className='mb-2'>Biografi</Label>
+              <Label htmlFor="biography" className='mb-2'>Biografi <span className='ml-1 text-sm text-gray-500'>(opsional)</span></Label>
               <Textarea
                 placeholder="Biografi"
                 value={data.biography}
                 onChange={(e) => setData('biography', e.target.value)}
                 rows={4}
-                className="border rounded-md p-2"
+                className="p-2 border rounded-md"
               />
               {errors.biography && <div className="text-red-500">{errors.biography}</div>}
             </div>
@@ -107,21 +120,23 @@ const PenelitiCreate = () => {
                 type="text" 
                 id="contact_info" 
                 placeholder="Informasi Kontak" 
-                value={data.contactInfo} 
-                onChange={e => setData('contactInfo', e.target.value)} 
+                value={data.contact_info} 
+                onChange={e => setData('contact_info', e.target.value)} 
               />
-              {errors.contactInfo && <div className="text-red-500">{errors.contactInfo}</div>}
+              {errors.contact_info && <div className="text-red-500">{errors.contact_info}</div>}
             </div>
 
-            {/* Foto */}
+            {/* ID Sinta */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="picture" className='mb-2'>Foto</Label>
+              <Label htmlFor="sinta_id" className='mb-2'>ID Sinta <span className='ml-1 text-sm text-gray-500'>(opsional)</span></Label>
               <Input 
-                type="file" 
-                id="picture" 
-                onChange={e => setData('picture', e.target.files[0])} 
+                type="text" 
+                id="sinta_id" 
+                placeholder="ID Sinta" 
+                value={data.sinta_id} 
+                onChange={e => setData('sinta_id', e.target.value)} 
               />
-              {errors.picture && <div className="text-red-500">{errors.picture}</div>}
+              {errors.sinta_id && <div className="text-red-500">{errors.sinta_id}</div>}
             </div>
 
             {/* Submit Button */}
@@ -135,7 +150,7 @@ const PenelitiCreate = () => {
               </Button>
             </div>
             {errors.general && (
-              <div className="text-red-500 bg-red-100 p-4 rounded-lg">
+              <div className="p-4 text-red-500 bg-red-100 rounded-lg">
                 {errors.general}
               </div>
             )}

@@ -49,7 +49,7 @@ const MultimediaMain = ({ multimedia = [] }) => {
       <div className="flex flex-col flex-1 gap-4 p-4">
 
         {/* Header Atas Tabel */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between">
           {/* Input Search */}
           <Input 
             type="text" 
@@ -59,29 +59,7 @@ const MultimediaMain = ({ multimedia = [] }) => {
             className="w-1/2 px-8 py-3"
           />
 
-          {/* Actions: Status, Columns, Add New */}
           <div className="flex items-center space-x-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Status</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Aktif</DropdownMenuItem>
-                <DropdownMenuItem>Non-Aktif</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Kolom</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Thumbnail</DropdownMenuItem>
-                <DropdownMenuItem>Judul</DropdownMenuItem>
-                <DropdownMenuItem>Tipe</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
             <Link href='/dashboard/multimedia/manajemen-multimedia/create'>
               <Button className="text-white bg-black rounded-md hover:bg-gray-800">Tambah +</Button>
             </Link>
@@ -89,7 +67,7 @@ const MultimediaMain = ({ multimedia = [] }) => {
         </div>
 
         {/* Tabel Data */}
-        <div className="min-h-[120vh] flex-1 rounded-xl bg-muted/50 md:min-h-min p-4">
+        <div className="flex-1 p-4 rounded-xl bg-muted/50">
           <Table>
             <TableHeader>
               <TableRow>

@@ -1,125 +1,167 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/Layout/AdminLayout';
-import { Link } from '@inertiajs/react';
+import { useForm, Link } from '@inertiajs/react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from '@/Components/ui/button';
 
-const PenelitiEdit = ({ existingData }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [fieldOfStudy, setFieldOfStudy] = useState('');
-  const [biography, setBiography] = useState('');
-  const [contactInfo, setContactInfo] = useState('');
-  const [picture, setPicture] = useState('');
+const PenelitiEdit = ({ researchers }) => {
+  const { data, setData, put, processing, errors } = useForm({
+    name: researchers.name ||'',
+    email: researchers.email ||'',
+    field_of_study: researchers.field_of_study ||'',
+    biography: researchers.biography ||'',
+    contact_info: researchers.contact_info ||'',
+    picture: null,
+    sinta_id: researchers.sinta_id ||'',
+  });
 
-  useEffect(() => {
-    if (existingData) {
-      setName(existingData.name);
-      setEmail(existingData.email);
-      setFieldOfStudy(existingData.field_of_study);
-      setBiography(existingData.biography);
-      setContactInfo(existingData.contact_info);
-      setPicture(existingData.picture);
-    }
-  }, [existingData]);
+  function submit(e) {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('field_of_study', data.field_of_study);
+    formData.append('biography', data.biography);
+    formData.append('contact_info', data.contact_info);
+    formData.append('picture', data.picture);
+    formData.append('sinta_id', data.sinta_id);
+
+    put(`/dashboard/peneliti/manajemen-peneliti/edit/${researchers.id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
 
   return (
     <AdminLayout>
-      <div className="flex flex-1 flex-col gap-4 p-4">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div className="aspect-auto rounded-xl flex items-center">
-            <Link href='/dashboard/peneliti/daftar-peneliti/' className='border border-slate-950 py-1.5 px-4 inline-block rounded-lg'>
-              Kembali
+      <div className="flex flex-col flex-1 gap-4 p-4">
+        <div className="grid gap-4 auto-rows-min md:grid-cols-3">
+          <div className="flex items-center aspect-auto rounded-xl">
+            <Link href='/dashboard/peneliti/manajemen-peneliti/'>
+              <Button variant="outline">Kembali</Button>
             </Link>
           </div>
-          <div className="aspect-auto font-semibold text-xl">
-            Edit Data Peneliti
-          </div>
-          <div className="aspect-auto rounded-xl bg-muted/50" />
+          <div className="text-xl font-semibold aspect-auto">Edit Data Peneliti</div>
         </div>
         <div className="min-h-[100vh] flex-1 md:min-h-min p-4">
-          <form className="w-full max-w-lg md:max-w-2xl space-y-4">
+          <div>
+            <img src={`/storage/${researchers.picture}`} alt="" className='mb-4 aspect-square max-w-[500px] rounded object-cover object-top' />
+          </div>
+          <form onSubmit={submit} className="w-full mx-auto space-y-4">
+            {/* Foto */}
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="picture" className='mb-2'>Foto <span className='ml-1 text-sm text-gray-500'>(Opsional)</span></Label>
+              <Input 
+                type="file" 
+                id="picture" 
+                onChange={e => setData('picture', e.target.files[0])} 
+              />
+              {errors.picture && <div className="text-red-500">{errors.picture}</div>}
+            </div>
+
+            {/* Nama */}
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="name" className='mb-2'>Nama</Label>
-              <Input
-                type="text"
-                id="name"
-                placeholder="Nama"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full border border-slate-950 rounded-lg h-12"
+              <Input 
+                type="text" 
+                id="name" 
+                placeholder="Nama" 
+                value={data.name} 
+                onChange={e => setData('name', e.target.value)} 
               />
+              {errors.name && <div className="text-red-500">{errors.name}</div>}
             </div>
+
+            {/* Email */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="email" className='mb-2 mt-4'>Email</Label>
-              <Input
-                type="email"
-                id="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-slate-950 rounded-lg h-12"
+              <Label htmlFor="email" className='mb-2'>Email</Label>
+              <Input 
+                type="email" 
+                id="email" 
+                placeholder="Email" 
+                value={data.email} 
+                onChange={e => setData('email', e.target.value)} 
                 readOnly
               />
+              {errors.email && <div className="text-red-500">{errors.email}</div>}
             </div>
+
+            {/* Bidang Studi */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="field_of_study" className='mb-2 mt-4'>Bidang Studi</Label>
-              <Input
-                type="text"
-                id="field_of_study"
-                placeholder="Bidang Studi"
-                value={fieldOfStudy}
-                onChange={(e) => setFieldOfStudy(e.target.value)}
-                className="w-full border border-slate-950 rounded-lg h-12"
+              <Label htmlFor="field_of_study" className='mb-2'>Bidang Studi</Label>
+              <Input 
+                type="text" 
+                id="field_of_study" 
+                placeholder="Bidang Studi" 
+                value={data.field_of_study} 
+                onChange={e => setData('field_of_study', e.target.value)} 
               />
+              {errors.field_of_study && <div className="text-red-500">{errors.field_of_study}</div>}
             </div>
+
+            {/* Biografi */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="biography" className='mb-2 mt-4'>Biografi</Label>
+              <Label htmlFor="biography" className='mb-2'>Biografi <span className='ml-1 text-sm text-gray-500'>(opsional)</span></Label>
               <Textarea
-                id="biography"
                 placeholder="Biografi"
-                value={biography}
-                onChange={(e) => setBiography(e.target.value)}
-                className="w-full border border-slate-950 rounded-lg h-32"
+                value={data.biography}
+                onChange={(e) => setData('biography', e.target.value)}
+                rows={4}
+                className="p-2 border rounded-md"
               />
+              {errors.biography && <div className="text-red-500">{errors.biography}</div>}
             </div>
+
+            {/* Informasi Kontak */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="contact_info" className='mb-2 mt-4'>Informasi Kontak</Label>
-              <Input
-                type="text"
-                id="contact_info"
-                placeholder="Informasi Kontak"
-                value={contactInfo}
-                onChange={(e) => setContactInfo(e.target.value)}
-                className="w-full border border-slate-950 rounded-lg h-12"
+              <Label htmlFor="contact_info" className='mb-2'>Informasi Kontak</Label>
+              <Input 
+                type="text" 
+                id="contact_info" 
+                placeholder="Informasi Kontak" 
+                value={data.contact_info} 
+                onChange={e => setData('contact_info', e.target.value)} 
               />
+              {errors.contact_info && <div className="text-red-500">{errors.contact_info}</div>}
             </div>
+
+            {/* ID Sinta */}
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="picture" className='mb-2 mt-4'>Foto</Label>
-              <Input
-                type="file"
-                id="picture"
-                onChange={(e) => setPicture(e.target.files[0])}
-                className="w-full border border-slate-950 rounded-lg"
+              <Label htmlFor="sinta_id" className='mb-2'>ID Sinta <span className='ml-1 text-sm text-gray-500'>(opsional)</span></Label>
+              <Input 
+                type="text" 
+                id="sinta_id" 
+                placeholder="ID Sinta" 
+                value={data.sinta_id} 
+                onChange={e => setData('sinta_id', e.target.value)} 
               />
-              {picture && (
-                <div className="mt-2">
-                  <p>Foto saat ini: {picture.name || 'Tersedia'}</p>
-                </div>
-              )}
+              {errors.sinta_id && <div className="text-red-500">{errors.sinta_id}</div>}
             </div>
+
+            {/* Submit Button */}
             <div className="flex justify-end">
-              <Button type="submit" className="mt-4 py-2 px-4 bg-slate-950 text-white rounded-lg hover:bg-slate-800">
+              <Button
+                className='rounded-md bg-slate-950 hover:bg-slate-800'
+                type="submit" 
+                disabled={processing}
+              >
                 Simpan Perubahan
               </Button>
             </div>
+            {errors.general && (
+              <div className="p-4 text-red-500 bg-red-100 rounded-lg">
+                {errors.general}
+              </div>
+            )}
           </form>
         </div>
       </div>
     </AdminLayout>
   );
-}
+};
 
 export default PenelitiEdit;

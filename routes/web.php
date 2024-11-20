@@ -20,15 +20,30 @@ use App\Http\Controllers\User\PenelitiController as UserPeneliti;
 use App\Http\Controllers\Profile\UserProfileController as UserProfile;
 
 // Administrator
-use App\Http\Controllers\Admin\MateriController as AdminMateri;
-use App\Http\Controllers\Admin\ForumController as AdminForum;
 use App\Http\Controllers\Admin\UsersController as AdminUsers;
-use App\Http\Controllers\Admin\ArtikelController as AdminArtikel;
 use App\Http\Controllers\Admin\BerandaController as AdminBeranda;
 use App\Http\Controllers\Admin\PenelitiController as AdminPeneliti;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
-use App\Http\Controllers\Admin\MultimediaController as AdminMultimedia;
-use App\Http\Controllers\Admin\Multimedia\ManajemenMultimediaController as AdminManajemenMultimedia;
+
+use App\Http\Controllers\Admin\Multimedia\MediaManagementController as AdminManajemenMultimedia;
+use App\Http\Controllers\Admin\Multimedia\ContentDisplayController as AdminContentMultimedia;
+use App\Http\Controllers\Admin\Multimedia\ContentApprovalController as AdminApprovalMultimedia;
+
+use App\Http\Controllers\Admin\Materi\MediaManagementController as AdminManajemenMateri;
+use App\Http\Controllers\Admin\Materi\ContentDisplayController as AdminContentMateri;
+use App\Http\Controllers\Admin\Materi\ContentApprovalController as AdminApprovalMateri;
+
+use App\Http\Controllers\Admin\Forum\MediaManagementController as AdminManajemenForum;
+use App\Http\Controllers\Admin\Forum\ContentDisplayController as AdminContentForum;
+use App\Http\Controllers\Admin\Forum\ContentApprovalController as AdminApprovalForum;
+
+use App\Http\Controllers\Admin\Researcher\MediaManagementController as AdminManajemenPeneliti;
+use App\Http\Controllers\Admin\Researcher\ContentDisplayController as AdminContentPeneliti;
+use App\Http\Controllers\Admin\Researcher\ContentApprovalController as AdminApprovalPeneliti;
+
+use App\Http\Controllers\Admin\Article\MediaManagementController as AdminManajemenArtikel;
+use App\Http\Controllers\Admin\Article\ContentDisplayController as AdminContentArtikel;
+use App\Http\Controllers\Admin\Article\ContentApprovalController as AdminApprovalArtikel;
 
 // Guest
 Route::middleware('guest')->group(function () {
@@ -56,7 +71,6 @@ Route::post('/profile/teacher', [UserProfileCompletion::class, 'storeTeacher'])-
 
 Route::middleware(['guest_or_profile_completed'])->group(function () {
     Route::get('/lengkapi-data', [UserProfileCompletion::class, 'index'])->middleware('auth')->name('profile.completion');
-    // User (Siswa / Guru)
     Route::controller(UserHome::class)->group(function () {
         Route::get('/', 'index');
     });
@@ -71,6 +85,7 @@ Route::middleware(['guest_or_profile_completed'])->group(function () {
     Route::prefix('materi')->group(function () {
         Route::controller(UserMateri::class)->group(function () {
             Route::get('/', 'index');
+            Route::get('/{slug}', 'show');
         });
     });
 
@@ -89,6 +104,7 @@ Route::middleware(['guest_or_profile_completed'])->group(function () {
     Route::prefix('peneliti')->group(function () {
         Route::controller(UserPeneliti::class)->group(function () {
             Route::get('/', 'index');
+            Route::get('/{slug}', 'show');
         });
     });
 
@@ -115,15 +131,15 @@ Route::prefix('dashboard')->middleware(['auth', 'admin.superadmin'])->group(func
                 Route::get('/', 'index');
             });
         });
-        
+
         Route::prefix('multimedia')->group(function () {
             Route::get('/', function () {
                 return redirect()->route('admin.list.multimedia.index');
             });
             
             Route::prefix('kelola-konten')->group(function () {
-                Route::controller(AdminMultimedia::class)->group(function () {
-                    Route::get('/', 'index_konten')->name('admin.content.multimedia.index');
+                Route::controller(AdminContentMultimedia::class)->group(function () {
+                    Route::get('/', 'index')->name('admin.content.multimedia.index');
                 });
             });
 
@@ -141,18 +157,18 @@ Route::prefix('dashboard')->middleware(['auth', 'admin.superadmin'])->group(func
         
         Route::prefix('materi')->group(function () {
             Route::prefix('konten-halaman')->group(function () {
-                Route::controller(AdminMateri::class)->group(function () {
-                    Route::get('/', 'index_daftar')->name('admin.list.materi.index');
+                Route::controller(AdminContentMateri::class)->group(function () {
+                    Route::get('/', 'index')->name('admin.list.materi.index');
                 });
             });
-            Route::prefix('daftar-materi')->group(function () {
-                Route::controller(AdminMateri::class)->group(function () {
-                    Route::get('/', 'index_daftar')->name('admin.list.materi.index');
-                    Route::get('/create', 'create_daftar')->name('admin.list.materi.create');
-                    Route::post('/create', 'store_daftar')->name('admin.list.materi.post');
-                    Route::get('/edit/{slug}', 'edit_daftar')->name('admin.list.materi.edit');
-                    Route::put('/edit/{slug}', 'update_daftar')->name('admin.list.materi.update');
-                    Route::delete('/delete/{slug}', 'destroy_daftar')->name('admin.list.materi.destroy');
+            Route::prefix('manajemen-materi')->group(function () {
+                Route::controller(AdminManajemenMateri::class)->group(function () {
+                    Route::get('/', 'index')->name('admin.list.materi.index');
+                    Route::get('/create', 'create')->name('admin.list.materi.create');
+                    Route::post('/create', 'store')->name('admin.list.materi.post');
+                    Route::get('/edit/{slug}', 'edit')->name('admin.list.materi.edit');
+                    Route::put('/edit/{slug}', 'update')->name('admin.list.materi.update');
+                    Route::delete('/delete/{slug}', 'destroy')->name('admin.list.materi.destroy');
                 });
             });
         });
@@ -161,35 +177,35 @@ Route::prefix('dashboard')->middleware(['auth', 'admin.superadmin'])->group(func
         });
         Route::prefix('artikel')->group(function () {
             Route::prefix('konten-halaman')->group(function () {
-                Route::controller(AdminArtikel::class)->group(function () {
+                Route::controller(AdminContentArtikel::class)->group(function () {
                     Route::get('/', 'index_konten');
                 });
             });
             Route::prefix('daftar-artikel')->group(function () {
-                Route::controller(AdminArtikel::class)->group(function () {
-                    Route::get('/', 'index_daftar')->name('admin.list.artikel.index');
-                    Route::get('/create', 'create_daftar')->name('admin.list.artikel.create');
-                    Route::post('/create', 'store_daftar')->name('admin.list.artikel.post');
-                    Route::get('/edit/{slug}', 'edit_daftar')->name('admin.list.artikel.edit');
-                    Route::put('/edit/{slug}', 'update_daftar')->name('admin.list.artikel.update');
-                    Route::delete('/delete/{slug}', 'destroy_daftar')->name('admin.list.artikel.destroy');
+                Route::controller(AdminManajemenArtikel::class)->group(function () {
+                    Route::get('/', 'index')->name('admin.list.artikel.index');
+                    Route::get('/create', 'create')->name('admin.list.artikel.create');
+                    Route::post('/create', 'store')->name('admin.list.artikel.post');
+                    Route::get('/edit/{slug}', 'edit')->name('admin.list.artikel.edit');
+                    Route::put('/edit/{slug}', 'update')->name('admin.list.artikel.update');
+                    Route::delete('/delete/{slug}', 'destroy')->name('admin.list.artikel.destroy');
                 });
             });
         });
         Route::prefix('peneliti')->group(function () {
             Route::prefix('konten-halaman')->group(function () {
-                Route::controller(AdminPeneliti::class)->group(function () {
+                Route::controller(AdminContentPeneliti::class)->group(function () {
                     Route::get('/', 'index_konten');
                 });
             });
-            Route::prefix('daftar-peneliti')->group(function () {
-                Route::controller(AdminPeneliti::class)->group(function () {
-                    Route::get('/', 'index_daftar')->name('admin.list.peneliti.index');
-                    Route::get('/tambah-peneliti', 'create_daftar')->name('admin.list.peneliti.create');
-                    Route::post('/tambah-peneliti', 'store_daftar')->name('admin.list.peneliti.post');
-                    Route::get('/edit/{slug}', 'edit_daftar')->name('admin.list.peneliti.edit');
-                    Route::put('/edit/{slug}', 'update_daftar')->name('admin.list.peneliti.update');
-                    Route::delete('/delete/{slug}', 'destroy_daftar')->name('admin.list.peneliti.destroy');
+            Route::prefix('manajemen-peneliti')->group(function () {
+                Route::controller(AdminManajemenPeneliti::class)->group(function () {
+                    Route::get('/', 'index')->name('admin.list.peneliti.index');
+                    Route::get('/tambah-peneliti', 'create')->name('admin.list.peneliti.create');
+                    Route::post('/tambah-peneliti', 'store')->name('admin.list.peneliti.post');
+                    Route::get('/edit/{id}', 'edit')->name('admin.list.peneliti.edit');
+                    Route::put('/edit/{id}', 'update')->name('admin.list.peneliti.update');
+                    Route::delete('/delete/{id}', 'destroy')->name('admin.list.peneliti.destroy');
                 });
             });
         });
@@ -202,12 +218,5 @@ Route::prefix('dashboard')->middleware(['auth', 'admin.superadmin'])->group(func
             Route::controller(AdminUsers::class)->group(function () {
                 Route::get('/', 'index');
             });
-        });
-
-        Route::controller(AdminForum::class)->group(function () {
-            Route::get('/forum', 'index');
-        });
-        Route::controller(AdminArtikel::class)->group(function () {
-            Route::get('/artikel', 'index');
         });
 });

@@ -73,9 +73,9 @@ export default function AppSidebar() {
         title: "Materi",
         url: "#",
         items: [
-          { title: "Kelola Konten Tampilan", url: "/dashboard/materi/daftar-materi" },
-          { title: "Manajemen Materi", url: "/dashboard/materi/daftar-materi" },
-          { title: "Persetujuan Konten", url: "/dashboard/materi/daftar-materi" },
+          { title: "Kelola Konten Tampilan", url: "/dashboard/materi/manajemen-materi" },
+          { title: "Manajemen Materi", url: "/dashboard/materi/manajemen-materi" },
+          { title: "Persetujuan Konten", url: "/dashboard/materi/manajemen-materi" },
         ],
       },
       {
@@ -96,16 +96,16 @@ export default function AppSidebar() {
         title: "Peneliti",
         url: "#",
         items: [
-          { title: "Daftar Peneliti", url: "/dashboard/peneliti/daftar-peneliti" },
+          { title: "Manajemen Peneliti", url: "/dashboard/peneliti/manajemen-peneliti" },
         ],
       },
       {
-        title: "Daftar Pengguna",
+        title: "Manajemen Pengguna",
         url: "#",
         items: [
-          { title: "Daftar Siswa", url: "/dashboard/siswa" },
-          { title: "Daftar Guru", url: "/dashboard/guru" },
-          ...(auth.user.role === 'superadmin' ? [{ title: "Daftar Admin", url: "/dashboard/admin" }] : []), // Tambahkan kondisi ini
+          { title: "Manajemen Siswa", url: "/dashboard/siswa" },
+          { title: "Manajemen Guru", url: "/dashboard/guru" },
+          ...(auth.user.role === 'superadmin' ? [{ title: "Manajemen Admin", url: "/dashboard/admin" }] : []), // Tambahkan kondisi ini
         ],
       },
     ],

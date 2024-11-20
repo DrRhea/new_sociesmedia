@@ -14,11 +14,11 @@ const PenelitiProfile = ({ peneliti }) => {
                     {peneliti.map((item, index) => (
                         <Card key={index} shadow="md" className="w-full max-w-md overflow-hidden rounded-3xl">
                             <CardBody className="p-0">
-                                <Link href={item.link}>
+                                <Link href={`peneliti/${item.slug}`}>
                                     <Image
                                         alt={item.name}
                                         className="object-cover w-screen rounded-t-3xl"
-                                        src={`./storage/upload/peneliti/${item.picture}`}
+                                        src={`./storage/${item.picture}`}
                                     />
                                 </Link>
                             </CardBody>

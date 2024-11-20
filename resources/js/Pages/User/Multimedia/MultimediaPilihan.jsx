@@ -102,7 +102,7 @@ const MultimediaPilihan = ({ multimedia }) => {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filteredMultimedia.map((item, index) => (
                 <Link href={`/multimedia/${item.slug}`} className="block group" key={index}>
-                  <Card isPressable isHoverable className='relative'>
+                  <Card isHoverable className='relative'>
                     <CardBody>
                       <Image src={`./storage/${item.thumbnail}`} alt={item.title} className='object-cover aspect-video' />
                     </CardBody>

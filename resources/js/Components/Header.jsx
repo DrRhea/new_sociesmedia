@@ -60,7 +60,7 @@ const Header = () => {
 
             <NavbarContent className="pr-3 sm:hidden" justify="center">
                 <NavbarBrand>
-                    <Link href="/" className="text-xl font-bold text-blue-600 duration-150 hover:text-blue-400">SociesMedia</Link>
+                    <Link href="/" className="text-xl font-bold text-blue-600 duration-150 hover:text-blue-400 Cur">SociesMedia</Link>
                 </NavbarBrand>
             </NavbarContent>
 
@@ -88,11 +88,11 @@ const Header = () => {
                         Forum
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive={url.startsWith("/artikel")}>
+                {/* <NavbarItem isActive={url.startsWith("/artikel")}>
                     <Link color="foreground" href="/artikel" className="duration-150 hover:text-blue-400">
                         Artikel
                     </Link>
-                </NavbarItem>
+                </NavbarItem> */}
                 <NavbarItem isActive={url.startsWith("/peneliti")} className="hidden md:flex">
                     <Link color="foreground" href="/peneliti" className="duration-150 hover:text-blue-400">
                         Peneliti
@@ -118,7 +118,7 @@ const Header = () => {
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Profile Actions" variant="flat">
                             <DropdownItem key="profile" className="gap-2 h-14">
-                                <Link href="/profile">
+                                <Link href={auth.user.role === 'admin' || auth.user.role === 'superadmin' ? '/dashboard' : '/profile'}>
                                     <p className="font-semibold">Halo {auth.user.name.split(' ')[0]}!</p>
                                     <p className="mt-1 font-medium text-slate-400">{auth.user.email}</p>
                                 </Link>
@@ -170,11 +170,11 @@ const Header = () => {
                         Forum
                     </Link>
                 </NavbarMenuItem>
-                <NavbarMenuItem isActive={url.startsWith("/artikel")}>
+                {/* <NavbarMenuItem isActive={url.startsWith("/artikel")}>
                     <Link className="w-full" href="/artikel">
                         Artikel
                     </Link>
-                </NavbarMenuItem>
+                </NavbarMenuItem> */}
                 <NavbarMenuItem isActive={url.startsWith("/peneliti")}>
                     <Link className="w-full" href="/peneliti">
                         Peneliti

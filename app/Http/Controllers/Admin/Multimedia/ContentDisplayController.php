@@ -7,5 +7,8 @@ use Illuminate\Http\Request;
 
 class ContentDisplayController extends Controller
 {
-    //
+    public function index_konten()
+    {
+        return inertia("Admin/Multimedia/Konten/MultimediaMain");
+    }
 }

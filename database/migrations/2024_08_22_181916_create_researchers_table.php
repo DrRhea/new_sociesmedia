@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('researchers', function (Blueprint $table) {
-          $table->id();
-          $table->string('name', 255);
-          $table->string('email', 255)->unique();
-          $table->string('field_of_study', 255);
-          $table->text('biography');
-          $table->string('contact_info', 255);
-          $table->string('picture', 255);
-          $table->string('sinta_id', 255)->unique();
-          $table->enum('status', ['active', 'inactive'])->default('active');
-          $table->timestamps();
-      });
+        Schema::create('researchers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255);
+            $table->string('email', 255)->unique();
+            $table->string('field_of_study', 255);
+            $table->text('biography');
+            $table->string('contact_info', 255);
+            $table->string('picture', 255);
+            $table->string('sinta_id', 255)->unique();
+            $table->string('slug');
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->timestamps();
+        });
     }
 
     /**

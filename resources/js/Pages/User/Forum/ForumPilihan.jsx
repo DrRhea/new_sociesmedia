@@ -39,7 +39,7 @@ const ForumPilihan = () => {
         </CardFooter>
       </Card>
 
-      <div>
+      <>
         <Card className="w-full max-w-screen-lg">
           <CardHeader className="justify-between">
             <div className="flex gap-5">
@@ -49,16 +49,12 @@ const ForumPilihan = () => {
                 <h5 className="tracking-tight text-small text-default-400">@zoeylang</h5>
               </div>
             </div>
-            <Button
-              className={isFollowed ? "bg-transparent text-foreground border-default-200" : ""}
-              color="primary"
-              radius="full"
-              size="sm"
-              variant={isFollowed ? "bordered" : "solid"}
-              onPress={() => setIsFollowed(!isFollowed)}
-            >
-              {isFollowed ? "Unfollow" : "Follow"}
-            </Button>
+            <i class='bx bx-dots-vertical-rounded' ></i>
+          </CardHeader>
+          <CardHeader className="flex gap-3">
+            <div className="flex flex-col">
+              <p className="text-md">Kenapa ya?</p>
+            </div>
           </CardHeader>
           <CardBody className="px-3 py-0 text-small text-default-400">
             <p>
@@ -73,16 +69,16 @@ const ForumPilihan = () => {
           </CardBody>
           <CardFooter className="gap-3">
             <div className="flex gap-1">
-              <p className="font-semibold text-default-400 text-small">4</p>
-              <p className=" text-default-400 text-small">Following</p>
+              <i class='bx bx-like text-sm'></i>
+              <p className="font-semibold text-default-400 text-small">97.1K</p>
             </div>
             <div className="flex gap-1">
-              <p className="font-semibold text-default-400 text-small">97.1K</p>
-              <p className="text-default-400 text-small">Followers</p>
+              <i class='bx bx-chat text-sm' ></i>
+              <p className="font-semibold text-default-400 text-small">4</p>
             </div>
           </CardFooter>
         </Card>
-      </div>
+      </>
     </section>
   )
 }

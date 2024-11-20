@@ -16,10 +16,17 @@ const MultimediaMain = ({ auth, multimedia }) => {
 
     return (
         <>
-            <Head>
-                <title>Multimedia - Sociedmedia</title>
-                <meta name="description" content="" />
+            <Head head-key="multimedia">
+                <title>Multimedia - Sociesmedia</title>
+                <meta name="description" content="Jelajahi beragam konten multimedia seperti video, podcast, poster, dan games di Sociesmedia. Temukan inspirasi belajar yang seru dan menyenangkan!" />
+                <meta name="keywords" content="Sociesmedia, multimedia, video, podcast, poster, games, edukasi, konten belajar" />
+                <meta name="author" content="Sociesmedia" />
+                <meta name="robots" content="index, follow" />
+                
+                {/* Canonical URL untuk menghindari duplikat konten */}
+                <link rel="canonical" href="https://sociesmedia.id/multimedia" />
             </Head>
+
 
             <UserLayout>
                 <MultimediaHero />

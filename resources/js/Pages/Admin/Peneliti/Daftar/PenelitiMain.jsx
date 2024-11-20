@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
 import AdminLayout from '@/Layout/AdminLayout';
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
   Table,
   TableBody,
   TableCell,
@@ -17,35 +8,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Link } from '@inertiajs/react';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Button } from "@nextui-org/react";
+import { Link, router } from '@inertiajs/react';
 import 'boxicons/css/boxicons.min.css';
 
-const PenelitiMain = ({ researchers }) => {
+const PenelitiMain = ({ researchers = [] }) => {
   const [selectedPeneliti, setSelectedPeneliti] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState('');
   const filteredResearchers = researchers.filter((item) =>
-    item.nama && item.nama.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleOpenModal = (peneliti) => {
+    setSelectedPeneliti(peneliti);
+    onOpen();
+  };
+
+  const handleOpenDeleteModal = (peneliti) => {
+    setSelectedPeneliti(peneliti);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDelete = (selectedPeneliti) => {
+    router.delete(`/dashboard/peneliti/manajemen-peneliti/delete/${selectedPeneliti.id}`);
+    setDeleteModalOpen(false);
+    setSelectedPeneliti(null);
+  };
 
   return (
     <AdminLayout>
-      <div className="flex flex-1 flex-col gap-4 p-4">
+      <div className="flex flex-col flex-1 gap-4 p-4">
         {/* Header Atas Tabel */}
-        <div className="flex items-center justify-between mb-4">
-          {/* Input Search */}
+        <div className="flex items-center justify-between">
           <Input 
             type="text" 
             placeholder="Cari nama peneliti..." 
@@ -54,32 +52,9 @@ const PenelitiMain = ({ researchers }) => {
             className="w-1/2 px-8 py-3"
           />
 
-          {/* Actions: Status, Columns, Add New */}
           <div className="flex items-center space-x-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Status</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Aktif</DropdownMenuItem>
-                <DropdownMenuItem>Non-Aktif</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Kolom</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Nama</DropdownMenuItem>
-                <DropdownMenuItem>Asal</DropdownMenuItem>
-                <DropdownMenuItem>Biografi</DropdownMenuItem>
-                <DropdownMenuItem>Kontak</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Link href='/dashboard/peneliti/daftar-peneliti/tambah-peneliti'>
-              <Button className="bg-black text-white rounded-md hover:bg-gray-800">Tambah +</Button>
+            <Link href='/dashboard/peneliti/manajemen-peneliti/tambah-peneliti'>
+              <Button className="text-white bg-black rounded-md hover:bg-gray-800">Tambah +</Button>
             </Link>
           </div>
         </div>
@@ -90,10 +65,11 @@ const PenelitiMain = ({ researchers }) => {
             <TableHeader>
               <TableRow>
                 <TableHead className="text-center">No</TableHead>
+                <TableHead className="text-center">Foto</TableHead>
                 <TableHead className="text-center">Nama</TableHead>
-                <TableHead className="text-center">Asal</TableHead>
-                <TableHead className="text-center">Biografi</TableHead>
+                <TableHead className="text-center">Email</TableHead>
                 <TableHead className="text-center">Kontak</TableHead>
+                <TableHead className="text-center">ID Sinta</TableHead>
                 <TableHead className="text-center">Aksi</TableHead>
               </TableRow>
             </TableHeader>
@@ -101,51 +77,48 @@ const PenelitiMain = ({ researchers }) => {
               {filteredResearchers.length > 0 ? (
                 filteredResearchers.map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell className="text-center font-medium">{index + 1}</TableCell>
-                    <TableCell className="text-center font-medium">{item.nama}</TableCell>
-                    <TableCell className="text-center">{item.asal}</TableCell>
-                    <TableCell className="text-center">{item.biografi}</TableCell>
-                    <TableCell className="text-center">{item.kontak}</TableCell>
+                    <TableCell className="font-medium text-center">{index + 1}</TableCell>
+                    <TableCell className="flex justify-center">
+                      <img src={`/storage/${item.picture}`} alt="" className='w-12 rounded-lg aspect-square'/>
+                    </TableCell>
+                    <TableCell className="font-bold text-center">{item.name}</TableCell>
                     <TableCell className="text-center">
-                      <div className="flex justify-center space-x-2">
-                        <Link href={`/dashboard/peneliti/daftar-peneliti/edit/${item.id}`} className="text-black hover:text-gray-700">
-                          <i className='bx bx-edit-alt text-xl'></i>
+                      <a href={`mailto:${item.email}`} className="text-blue-500 hover:underline">
+                        {item.email}
+                      </a>
+                    </TableCell>
+                    <TableCell className="text-center">{item.contact_info}</TableCell>
+                    <TableCell className="text-center">{item.sinta_id}</TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex items-center justify-center space-x-2">
+                        {/* Tombol User Detail */}
+                        <button 
+                          onClick={() => handleOpenModal(item)}
+                          className="text-black hover:text-gray-700"
+                        >
+                          <i className='text-xl bx bxs-user-detail'></i>
+                        </button>
+
+                        <span className=''>
+                          <i class='text-xl bx bxs-chevron-left'></i>
+                        </span>
+
+                        {/* Tombol Edit */}
+                        <Link href={`/dashboard/peneliti/manajemen-peneliti/edit/${item.id}`} className="text-black hover:text-gray-700">
+                          <i className='text-xl bx bx-edit-alt'></i>
                         </Link>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <button onClick={() => setSelectedPeneliti(item)} className="text-black hover:text-gray-700">
-                              <i className="bx bx-trash text-xl"></i>
-                            </button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>Konfirmasi Penghapusan</DialogTitle>
-                              <DialogDescription>
-                                Apakah Anda yakin ingin menghapus peneliti <strong>{item.nama}</strong>? Tindakan ini tidak dapat dibatalkan.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <Button variant="secondary" onClick={() => setSelectedPeneliti(null)}>Batal</Button>
-                              <Button 
-                                className="bg-black text-white hover:bg-gray-800" 
-                                onClick={() => {
-                                  // Tambahkan logika hapus di sini
-                                  console.log(`Peneliti ${item.nama} deleted`);
-                                  setSelectedPeneliti(null);
-                                }}
-                              >
-                                Hapus
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
+
+                        {/* Tombol Delete */}
+                        <button onClick={() => handleOpenDeleteModal(item)} className="text-black hover:text-gray-700">
+                          <i className="text-xl bx bx-trash"></i>
+                        </button>
                       </div>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-4">
+                  <TableCell colSpan={7} className="py-4 text-center">
                     Belum ada data <strong>peneliti</strong> tersedia.
                   </TableCell>
                 </TableRow>
@@ -153,33 +126,69 @@ const PenelitiMain = ({ researchers }) => {
             </TableBody>
           </Table>
         </div>
-        
-        {/* Pagination */}
-        <div className="flex justify-center mt-4">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
       </div>
+
+      {/* Modal Detail Peneliti */}
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Detail Peneliti
+              </ModalHeader>
+              <ModalBody>
+                {selectedPeneliti && (
+                  <>
+                    <div className="flex justify-center mb-4">
+                      <img 
+                        src={`/storage/${selectedPeneliti.picture}`} 
+                        alt={`Foto ${selectedPeneliti.name}`} 
+                        className="object-cover w-24 h-24 rounded-lg"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p><strong>Nama:</strong> {selectedPeneliti.name}</p>
+                      <p><strong>Bidang Studi:</strong> {selectedPeneliti.field_of_study || "Tidak tersedia"}</p>
+                      <p><strong>Email:</strong> {selectedPeneliti.email}</p>
+                      <p><strong>Kontak:</strong> {selectedPeneliti.contact_info || "Tidak tersedia"}</p>
+                      <p><strong>ID Sinta:</strong> {selectedPeneliti.sinta_id || "Tidak tersedia"}</p>
+                      <p><strong>Biografi:</strong> {selectedPeneliti.biography || "Tidak tersedia"}</p>
+                      <p><strong>Status:</strong> {selectedPeneliti.status === 'active' ? "Aktif" : "Non-Aktif"}</p>
+                    </div>
+                  </> 
+                )}
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onClick={onClose}>
+                  Tutup
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      {/* Modal Konfirmasi Penghapusan */}
+      <Modal isOpen={isDeleteModalOpen} onOpenChange={setDeleteModalOpen}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>Konfirmasi Penghapusan</ModalHeader>
+              <ModalBody>
+                <p>Apakah Anda yakin ingin menghapus peneliti <strong>{selectedPeneliti?.name}</strong>? Tindakan ini tidak dapat dibatalkan.</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onClick={onClose}>
+                  Batal
+                </Button>
+                <Button className="bg-slate-950 hover:bg-slate-800" onClick={() => handleDelete(selectedPeneliti)}>
+                  Hapus
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </AdminLayout>
   );
 };

@@ -11,7 +11,7 @@ export default {
 		theme: {
 			extend: {
 				fontFamily: {
-					sans: ['Comic Neue', 'sans-serif']
+				sans: ['Outfit', 'sans-serif']
 				},
 				borderRadius: {
 					lg: 'var(--radius)',

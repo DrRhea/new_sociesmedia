@@ -19,6 +19,7 @@ class Peneliti extends Model
         'contact_info',
         'picture',
         'sinta_id',
+        'slug',
         'status',
     ]; 
 }

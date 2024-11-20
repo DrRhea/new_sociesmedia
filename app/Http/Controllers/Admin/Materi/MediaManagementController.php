@@ -1,99 +1,37 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Materi;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Materi;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class MateriController extends Controller
+class MediaManagementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index_konten()
+    public function index()
     {
-        return inertia("Admin/Materi/Konten/MateriMain");
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index_daftar()
-    {
-        $materi = Materi::latest()->get();
+        $materi = Materi::where('status', 'approved')->latest()->get();
         return inertia("Admin/Materi/Daftar/MateriMain", [
             'materi' => $materi
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create_daftar()
+    public function create()
     {
         return inertia("Admin/Materi/Daftar/MateriCreate");
     }
 
-    public function store_daftar (Request $request)
+    public function store (Request $request)
     {
         // Buat validator dengan validasi kondisional untuk konten
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255|unique:materi,title',
             'description' => 'nullable|string',
-            'grade' => 'required|in:VII,VIII,IX',
+            'grade' => 'required|in:VII,VIII,IX,Umum',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'content' => 'required|file|mimes:pdf,doc,docx,ppt,pptx',
         ], [
@@ -105,12 +43,12 @@ class MateriController extends Controller
             'description.string' => 'Deskripsi harus berupa teks.',
             
             'content.required' => 'Konten wajib diisi.',
-            'content.file' => 'Konten harus berupa file jika tipe adalah poster.',
+            'content.file' => 'Konten harus berupa file.',
             'content.mimes' => 'Konten harus berupa dokumen dengan format pdf, doc, docx, ppt, pptx, xls, atau xlsx.',
             'content.url' => 'Konten harus berupa URL yang valid.',
             
             'grade.required' => 'Kelas wajib dipilih.',
-            'grade.in' => 'Kelas harus salah satu dari: 7, 8, atau 9.',
+            'grade.in' => 'Kelas harus salah satu dari: VII, VIII, IX, Umum.',
             
             'thumbnail.image' => 'Thumbnail harus berupa gambar.',
             'thumbnail.mimes' => 'Thumbnail harus berformat jpeg, png, jpg, atau gif.',
@@ -145,6 +83,8 @@ class MateriController extends Controller
                 $validatedData['thumbnail'] = 'upload/fallback-materi/VIII.jpeg';
             } elseif ($request->grade === 'IX') {
                 $validatedData['thumbnail'] = 'upload/fallback-materi/IX.jpeg';
+            } elseif ($request->grade === 'Umum') {
+                $validatedData['thumbnail'] = 'upload/fallback-materi/Umum.jpeg';
             }
         }
 
@@ -161,11 +101,8 @@ class MateriController extends Controller
 
         return redirect()->route('admin.list.materi.index')->with('success', 'Data berhasil disimpan!');
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit_daftar(string $slug)
+
+    public function edit(string $slug)
     {
         $materi = Materi::where('slug', $slug)->firstOrFail();
 
@@ -174,30 +111,87 @@ class MateriController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function update_daftar(Request $request, string $slug)
+    public function update(Request $request, string $slug)
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255|unique:materi,title,' . $slug,
+            'description' => 'nullable|string',
+            'grade' => 'required|in:VII,VIII,IX,Umum',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'content' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+        ], [
+            'title.required' => 'Judul wajib diisi.',
+            'title.string' => 'Judul harus berupa teks.',
+            'title.max' => 'Judul tidak boleh lebih dari :max karakter.',
+            'title.unique' => 'Judul sudah digunakan, harap pilih judul lain.',
+            
+            'description.string' => 'Deskripsi harus berupa teks.',
+            
+            'content.file' => 'Konten harus berupa file.',
+            'content.mimes' => 'Konten harus berupa dokumen dengan format pdf, doc, docx, ppt, pptx, xls, atau xlsx.',
+            
+            'grade.required' => 'Kelas wajib dipilih.',
+            'grade.in' => 'Kelas harus salah satu dari: VII, VIII, IX, Umum.',
+            
+            'thumbnail.image' => 'Thumbnail harus berupa gambar.',
+            'thumbnail.mimes' => 'Thumbnail harus berformat jpeg, png, jpg, atau gif.',
+        ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+
+        $validatedData = $validator->validated();
+
+        $materi = Materi::where('slug', $slug)->firstOrFail();
+
+        $slug = Str::slug($validatedData['title']);
+        $count = 1;
+
+        while (Materi::where('slug', $slug)->exists()) {
+            $slug = Str::slug($validatedData['title']) . '-' . $count;
+            $count++;
+        }
+
+        $validatedData['slug'] = $slug;
+
+        // Simpan file thumbnail
+        if ($request->hasFile('thumbnail')) {
+            if ($materi->thumbnail) {
+                Storage::disk('public')->delete($materi->thumbnail);
+            }
+            $thumbnailPath = $request->file('thumbnail')->store('upload/materi/thumbnail', 'public');
+            $validatedData['thumbnail'] = $thumbnailPath;
+        } else {
+            unset($validatedData['thumbnail']);
+        }
+
+        // Simpan file konten
+        if ($request->hasFile('content')) {
+            if ($materi->content) {
+                Storage::disk('public')->delete($materi->content);
+            }
+            $contentPath = $request->file('content')->store('upload/materi/content', 'public');
+            $validatedData['content'] = $contentPath;
+        } else {
+            unset($validatedData['content']);
+        }
+
+        $materi->update($validatedData);
+
+        return redirect()->route('admin.list.materi.index')->with('success', 'Data berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy_daftar($id)
+    public function destroy($id)
     {
         // Temukan data berdasarkan ID
         $materi = Materi::findOrFail($id);
 
         // Hapus thumbnail dari penyimpanan jika ada
-        if ($materi->thumbnail) {
+        if ($materi->thumbnail && $materi->content !== 'upload/fallback-materi/VII.jpeg' && $materi->content !== 'upload/fallback-materi/VIII.jpeg' && $materi->content !== 'upload/fallback-materi/IX.jpeg' && $materi->content !== 'upload/fallback-materi/Umum.jpeg') {
             Storage::disk('public')->delete($materi->thumbnail);
-        }
-
-        // Hapus content dari penyimpanan jika ada dan jika typenya poster
-        if ($materi->type === 'poster') {
-            Storage::disk('public')->delete($materi->content);
         }
 
         // Hapus data dari database

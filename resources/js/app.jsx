@@ -4,6 +4,7 @@ import '../css/app.css'
 import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import { NextUIProvider } from "@nextui-org/react";
+import 'boxicons'
 
 
 createInertiaApp({

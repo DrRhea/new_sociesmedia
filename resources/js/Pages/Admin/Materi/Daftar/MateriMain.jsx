@@ -41,7 +41,7 @@ const MateriMain = ({ materi }) => {
   );
 
   const handleDelete = (item) => {
-    router.delete(`/dashboard/materi/daftar-materi/delete/${item.id}`);
+    router.delete(`/dashboard/materi/manajemen-materi/delete/${item.id}`);
     setSelectedItem(null);
   };
 
@@ -49,7 +49,7 @@ const MateriMain = ({ materi }) => {
     <AdminLayout>
       <div className="flex flex-col flex-1 gap-4 p-4">
         {/* Header Atas Tabel */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between">
           {/* Input Search */}
           <Input 
             type="text" 
@@ -61,28 +61,7 @@ const MateriMain = ({ materi }) => {
 
           {/* Actions: Status, Columns, Add New */}
           <div className="flex items-center space-x-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Status</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Aktif</DropdownMenuItem>
-                <DropdownMenuItem>Non-Aktif</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Kolom</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Judul</DropdownMenuItem>
-                <DropdownMenuItem>Kelas</DropdownMenuItem>
-                <DropdownMenuItem>Thumbnail</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Link href='/dashboard/materi/daftar-materi/create'>
+            <Link href='/dashboard/materi/manajemen-materi/create'>
               <Button className="text-white bg-black rounded-md hover:bg-gray-800">Tambah +</Button>
             </Link>
           </div>
@@ -107,12 +86,12 @@ const MateriMain = ({ materi }) => {
                     <TableCell className="font-medium text-center">{index + 1}</TableCell>
                     <TableCell className="font-medium text-center">{item.title}</TableCell>
                     <TableCell className="text-center">{item.grade}</TableCell>
-                    <TableCell className="text-center">
-                      <img src={item.thumbnail} alt={item.title} className="object-cover w-16 h-16 rounded-md" />
+                    <TableCell className="flex items-center justify-center text-center">
+                      <img src={`/storage/${item.thumbnail}`} alt={item.title} className="object-cover w-16 h-16 rounded-md" />
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex justify-center space-x-2">
-                        <Link href={`/dashboard/materi/daftar-materi/edit/${item.slug}`} className="text-black hover:text-gray-700">
+                        <Link href={`/dashboard/materi/manajemen-materi/edit/${item.slug}`} className="text-black hover:text-gray-700">
                           <i className='text-xl bx bx-edit-alt'></i>
                         </Link>
                         <Dialog>
@@ -129,7 +108,6 @@ const MateriMain = ({ materi }) => {
                               </DialogDescription>
                             </DialogHeader>
                             <DialogFooter>
-                              <Button variant="secondary" onClick={() => setSelectedMateri(null)}>Batal</Button>
                               <Button 
                                 className="text-white bg-black hover:bg-gray-800" 
                                 onClick={() => handleDelete(item)}

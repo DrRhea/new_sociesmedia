@@ -16,7 +16,7 @@ return new class extends Migration
       $table->string('title', 255)->unique();
       $table->text('description')->nullable();
       $table->string('content');
-      $table->enum('grade', ['VII', 'VIII', 'IX']);
+      $table->enum('grade', ['VII', 'VIII', 'IX', 'Umum'])->default('Umum');
       $table->string('thumbnail');
       $table->string('slug');
       $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

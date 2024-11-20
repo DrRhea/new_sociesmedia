@@ -43,7 +43,7 @@ const BerandaNavigation = () => {
                             </CardBody>
                             <CardFooter className="justify-between text-small">
                                 <b>{item.title}</b>
-                                <p className="text-default-500">{`->`}</p>
+                                <i class='bx bx-chevron-right'></i>
                             </CardFooter>
                         </Card>
                     </Link>

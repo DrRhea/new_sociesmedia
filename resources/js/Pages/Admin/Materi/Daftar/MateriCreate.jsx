@@ -54,7 +54,7 @@ const MateriCreate = () => {
           </div>
           <div className="text-xl font-semibold aspect-auto">Tambah Data Materi</div>
         </div>
-        <div className="min-h-[100vh] flex-1 md:min-h-min p-4 bg-white shadow-md rounded-lg">
+        <div className="min-h-[100vh] flex-1 md:min-h-min p-4 bg-white rounded-lg">
           <form onSubmit={submit} className="w-full mx-auto space-y-6">
             {/* Judul */}
             <div className="grid items-center w-full gap-2">
@@ -101,11 +101,10 @@ const MateriCreate = () => {
             {/* Upload File Konten */}
             <div className="grid items-center w-full gap-2">
               <Label htmlFor="content" className="text-sm font-medium">Konten</Label>
-              <input
+              <Input
                 id="file_input"
                 type="file"
                 onChange={(e) => setData('content', e.target.files[0])}
-                className="block w-full h-12 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
               />
               {errors.content && <div className="text-sm text-red-500">{errors.content}</div>}
             </div>
@@ -128,6 +127,7 @@ const MateriCreate = () => {
                     <SelectItem value="VII">VII</SelectItem>
                     <SelectItem value="VIII">VIII</SelectItem>
                     <SelectItem value="IX">IX</SelectItem>
+                    <SelectItem value="Umum">Umum</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -137,7 +137,7 @@ const MateriCreate = () => {
             {/* Tombol Submit */}
             <div className="flex justify-end mt-4">
               <Button 
-                className="px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-500" 
+                className="px-6 py-2 text-white bg-black rounded-md hover:bg-blue-500" 
                 type="submit" 
                 disabled={processing}
               >

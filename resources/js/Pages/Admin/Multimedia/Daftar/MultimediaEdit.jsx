@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm, Link } from '@inertiajs/react';
+import { useForm, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layout/AdminLayout';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,12 +19,12 @@ const MultimediaEdit = ({ multimedia }) => {
   const [type, setType] = useState(multimedia.type || 'video');  // Set initial type from multimedia data
   const [selectedType, setSelectedType] = useState(multimedia.type || '');
 
-  const { data, setData, post, put, processing, errors } = useForm({
+  const { data, setData, put, processing, errors } = useForm({
     thumbnail: null,
-    title: multimedia.title || '',  // Initial value from multimedia data
-    description: multimedia.description || '',
-    type: multimedia.type || 'video',
-    content: multimedia.content || '',
+    title: multimedia?.title || '',  // Initial value from multimedia data
+    description: multimedia?.description || '',
+    type: multimedia?.type || 'video',
+    content: multimedia?.content || null,
   });
 
   function submit(e) {
@@ -35,7 +35,7 @@ const MultimediaEdit = ({ multimedia }) => {
     formData.append('title', data.title);
     formData.append('description', data.description);
     formData.append('type', data.type);
-    formData.append('content', type === 'poster' && data.content instanceof File ? data.content : data.content);
+    formData.append('content', data.content);
 
     // Pastikan menggunakan metode `put` untuk pengiriman data
     put(`/dashboard/multimedia/manajemen-multimedia/edit/${multimedia.slug}`, formData, {

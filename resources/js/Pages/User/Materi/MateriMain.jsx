@@ -5,7 +5,7 @@ import { Head, usePage } from "@inertiajs/react";
 import MateriPilihan from './MateriPilihan';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 
-const MateriMain = () => {
+const MateriMain = ({ materi }) => {
     const { auth } = usePage().props;
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const canAccess = 
@@ -23,13 +23,13 @@ const MateriMain = () => {
 
             <UserLayout>
                 <MateriHero />
-                <MateriPilihan />
+                <MateriPilihan materi={materi} />
                 
                 {canAccess && (
                     <>
                         <button
                             onClick={onOpen}
-                            className="fixed bottom-5 right-5 bg-blue-600/90 hover:bg-blue-500/80 duration-150 text-white p-3 rounded-xl shadow-lg text-center z-50"
+                            className="fixed z-50 p-3 text-center text-white duration-150 shadow-lg bottom-5 right-5 bg-blue-600/90 hover:bg-blue-500/80 rounded-xl"
                         >
                             <p>{'+'} Tambah <strong>Materi</strong> Disini</p>
                         </button>

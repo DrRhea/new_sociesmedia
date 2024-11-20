@@ -9,9 +9,9 @@ const BerandaMultimedia = ({ multimediaVideo, multimediaPodcast, multimediaPoste
             {/* Header section with title and link */}
             <div className="mb-6">
                 <h1 className="text-3xl font-semibold text-left">Multimedia Terbaru</h1>
-                <a href="/multimedia" className="block mt-2 font-semibold text-purple-600 text-md sm:absolute sm:right-0 sm:top-0 sm:mt-0 sm:inline">
+                <Link href="/multimedia" className="block mt-2 font-semibold text-purple-600 text-md sm:absolute sm:right-0 sm:top-0 sm:mt-0 sm:inline">
                     Lihat semua
-                </a>
+                </Link>
             </div>
 
             {/* Cards section */}
